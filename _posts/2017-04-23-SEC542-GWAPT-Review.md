@@ -1,7 +1,9 @@
 ---
 layout: post
 title: SANS SEC542/GWAPT Review
-published: true
+categories: [certifications]
+tags: [sans, sec542, giac, gwapt]
+description: Sample placeholder post.
 ---
 
 I February 2017 I participated in the SANS course SEC542 "Web App Penetration Testing and Ethical Hacking" held by Spanish instructor Raul Siles in Oslo, which I followed up taking the certificate attempt for GIAC GWAPT. Here is my feedback on it.
