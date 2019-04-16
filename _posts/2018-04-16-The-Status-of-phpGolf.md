@@ -3,7 +3,7 @@ layout: post
 title: The Status of phpGolf
 categories: [phpgolf]
 tags: [codegolf, php]
-description: Sample placeholder post.
+description: A post about the status about the phpGolf project
 ---
 
 As the former creator and maintainer of phpGolf.org, people ask me what happened to the php code golfing site and why it is down. The reason was basically that the server owner wanted to change to another hosting vendor. Since I was out of the country for a year, without proper access to my developing infrastructure, and limited amount of spare time, it just never got back online. If the site was to get back now, it would require another dedicated person to rewrite the old code, polish the design, dockerize it, and basically carry the whole thing. The source can be found on <a href="https://github.com/phpGolf">GitHub</a>, except for the challenges, but I can provide those for anyone interested. 
