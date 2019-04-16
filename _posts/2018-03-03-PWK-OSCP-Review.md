@@ -3,7 +3,7 @@ layout: post
 title: Offensive Security PWK/OSCP Review
 categories: [certifications]
 tags: [offsec, pwk, oscp]
-description: Sample placeholder post.
+description: My review of Offensive Security's PWK/OSCP
 ---
 
 # Intro
