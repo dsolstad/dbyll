@@ -7,7 +7,7 @@ highlighter: rouge
 markdown: kramdown
 disqus: dbyll
 google_analytics: UA-13093339-4
-title: dbyll
+title: Daniel Solstad
 
 defaults:
   -
