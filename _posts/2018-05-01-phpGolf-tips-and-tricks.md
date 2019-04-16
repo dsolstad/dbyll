@@ -1,9 +1,8 @@
 ---
 layout: post
 title: Tips and Tricks when Golfing in PHP
-categories: [phpfolf]
+categories: [phpgolf]
 tags: [codegolf, php]
-description: Sample placeholder post.
 ---
 
 <a href="https://en.wikipedia.org/wiki/Code_golf">Code golfing</a> is about creating the shortest code, in bytes, to solve a given problem, in a specific language or free of choice. It would be the opposite of <a href="https://xkcd.com/1960/">this</a>. 
