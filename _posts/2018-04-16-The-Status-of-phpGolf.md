@@ -75,7 +75,7 @@ This was the leading submission with only 118 bytes.
 <?for(;^$f=$m[strpos($m=~MAP,Ñ)+$c=~($Ü%2*strpos($m,õ))*~-($Ü&2)+$p=$a[$Ü++/5-3]];)${$$f|$$c?z:$a[]=$c}=$$p+1;echo$z;
 {% endhighlight %}
 
-And as shown in hex:
+And as shown in hex:  
 ![_config.yml]({{ site.baseurl }}/images/primo-pathing-hex.png)
 
 
