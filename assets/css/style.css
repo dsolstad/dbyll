@@ -1,7 +1,7 @@
 @import url(//fonts.googleapis.com/css?family=Ubuntu:500&subset=latin,latin-ext);
 
 body{
-	font-size: 20px;
+	font-size: 18px;
 	color: #2c3e50;
 }
 
@@ -98,7 +98,7 @@ article{
 }
 
 .article_body{
-	font-size: 20px;
+	font-size: 18px;
 	margin-top: 20px;
 	margin-bottom: 20px;
 }
