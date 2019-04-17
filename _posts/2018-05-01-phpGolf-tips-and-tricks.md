@@ -21,7 +21,7 @@ This guide was originally written by JWvdVeer and Wim for phpGolf.org. I have do
 * Know the behavior of PHP - PHP behaves in a consistent way, so you can always predict the outcome of the code. Sometimes you might even exploit known odd behavior of PHP.
 * Know the environment your code will run in. Most challenges have error_reporting E_ALL & ~E_NOTICE. So notices about functions being deprecated or undefined array indexes are accepted.
 * Use Google - Some challenges are copies of other challenges on the Internet. Or they are much the same. So you can get some inspiration of sometimes complete challenges.
-* Most of the time the less variables you use will result in a smaller solution in bytes. Ask yourself these questions: Do I really need them, or might the value of this variable also be derived from any other variable? Or can I combine two values into one in order to save even 1 byte?
+* Most of the time the less variables you use will result in a smaller solution in bytes. Ask yourself these questions: Do I really need them, or might the value of this variable also be derived from any other variable? Can I combine two values into one in order to save even 1 byte?
 
 
 ## Numbers
@@ -86,6 +86,8 @@ You could save 2 bytes doing this:
 
 Make sure to set your text editor to latin1 (ISO-8859-1 or Windows-1252) instead of UTF8 otherwise you will save those inverted bytes as multi-bytes which will do the opposite of what we are trying to do here. 
 
+Sometimes you can also invert the input to shorten your overall code.
+  
 A list of useful inverted characters: 
 ```
 * Tab (char 9) -> ~ö
@@ -118,8 +120,6 @@ A list of useful inverted characters:
 * '^' (char 94) -> ~¡
 * '_' (char 95) -> ~  (char 160, the fact you are not able to see whitespace doesn't mean that PHP treat is as whitespace!)
 ```
-
-Sometimes your code will be much shorter if you invert the input or create your output inverted.
 
 ## Arrays
 
@@ -310,7 +310,7 @@ All three examples below shows all unique letters in the string in capitals:
 * <a href="http://php.net/preg_replace">preg_replace</a> and <a href="http://php.net/preg_filter">preg_filter</a> does have an e-flag, which means that the replacement is being executed as shown in the example below.
 
 
-Both solutions are written by JWvdVeer and are solutions to the <a href="http://stackoverflow.com/questions/3190914/code-golf-pig-latin">PIG-latin golf challenge</a>:
+Both solutions below are written by JWvdVeer for the <a href="http://stackoverflow.com/questions/3190914/code-golf-pig-latin">PIG-latin golf challenge</a>:
 {% highlight php %}
 <?foreach(split(~ß,SENTENCE)as$a)echo($b++?~ß:'').(strpos(' aeuio',$a[0])?$a.w:substr($a,1).$a[0]).ay;
 {% endhighlight %}
@@ -402,4 +402,4 @@ Used for several purposes. One of them is converting letters to lowercase (see s
 Mind the fact that $int|$nonNumericString==$int==true. Sometimes this might be useful, because you don't need a semicolon instead and your code might be written in one expression (for example in a ternary-operator).
 
 ### Bitwise NOT (~)
-Covered in the *String* section
+Covered in the *String* section.
