@@ -24,7 +24,7 @@ Leading submission with 57 byte:
 ";
 {% endhighlight %}
 
-Shown in hex:
+Shown in hex:  
 ![_config.yml]({{ site.baseurl }}/images/primo-cantor-hex.png)
 
 By comparrison, this was the next shortest submission from the user JWvdVeer with 76 bytes:
