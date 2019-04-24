@@ -9,8 +9,8 @@ description: A post about the status about the phpGolf project and showing off s
 As the former creator and maintainer of phpGolf.org, people ask me what happened to the php code golfing site and why it is down. The reason was basically that the server owner wanted to change to another hosting vendor. Since I was out of the country for a year, without proper access to the developing infrastructure, and limited amount of time, it just never got back online. If the site was to get back now, it would require another dedicated soul to rewrite the old code, polish the design and basically carry the whole thing. The source can be found on <a href="https://github.com/phpGolf">GitHub</a>, except for the challenges, but I can provide those for anyone interested. 
 
 ![_config.yml]({{ site.baseurl }}/images/phpGolf.jpg)
-
-I will now show off two of the most impressive work from the public challenges. They were submitted in 2012 by the talented primo, whom had the top score on all challenges. The encoding used to calculate the filesize was ISO-8859-1.
+  
+Below are two of the most impressive work from the public challenges in my opinion. They were submitted in 2012 by the talented primo, whom had the top score on all challenges. The encoding used to calculate the filesize was ISO-8859-1.
 
 ## Cantor's Enumeration
 
