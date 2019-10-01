@@ -38,7 +38,7 @@ For Linux privilege escalation I would strongly recommend using <a href="https:/
 
 Windows privilege escalation is a little different. There are tools like linuxprivchecker.py for Windows also, but I never had any success running them. But all you really ever need are found on the following links:
 * <a href="http://www.fuzzysecurity.com/tutorials/16.html">http://www.fuzzysecurity.com/tutorials/16.html</a>
-* <a href="http://www.fuzzysecurity.com/tutorials/16.html">https://toshellandback.com/2015/11/24/ms-priv-esc/</a>
+* <a href="https://toshellandback.com/2015/11/24/ms-priv-esc/">https://toshellandback.com/2015/11/24/ms-priv-esc/</a>
 
 You will need to be able to build basic buffer overflow exploits yourself. The lab exercises are great resources for this. Besides that, I strongly recommend that you grab a Windows 7 machine from <a href="https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/">Microsoft</a> and try <a href="https://github.com/justinsteven/dostackbufferoverflowgood">dostackbufferoverflowgood</a>. Write an exploit yourself and look at the walkthrough afterwards. It will teach your tricks PWK didn't.
 
