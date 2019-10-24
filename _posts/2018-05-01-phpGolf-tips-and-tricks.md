@@ -14,13 +14,13 @@ Examples of on-going challenges:
 * <a href="https://www.reddit.com/r/codegolf/">https://www.reddit.com/r/codegolf/</a>
 * <a href="https://code-golf.io">https://code-golf.io</a>
 
-This guide was originally written by JWvdVeer and Wim for phpGolf.org. I have done some editing and fine tuning before releasing it again here. Although this guide is written for PHP version 5.3.3, the same principles apply, but does not include things like e.g. short array syntax. This is not an exhausting list of all tricks, but these might be the most important ones. The examples in the guide are not meant as the optimal solution for the given problem, but to show off the trick in question. The code written in the guide expects that error reporting is set to E_ALL & ~E_NOTICE.
+This guide was originally written by JWvdVeer and Wim for phpGolf.org. I have done some editing and fine tuning before releasing it again here. Although this guide is written for PHP version 5.3.3, the same principles still applies today, but does not include things like e.g. short array syntax. This is not an exhausting list of all tricks, but these might be the most important ones. The examples in the guide are not meant as the optimal solution for the given problem, but to show off the trick in question. The code written in the guide expects that error reporting is set to E_ALL & ~E_NOTICE.
 
 ## General Tips
 
-* Know the behavior of PHP - PHP behaves in a consistent way, so you can always predict the outcome of the code. Sometimes you might even exploit known odd behavior of PHP.
+* PHP behaves in a consistent way, so you can always predict the outcome of the code. Sometimes you might even exploit known odd behavior of PHP.
 * Know the environment your code will run in. Most challenges have error_reporting E_ALL & ~E_NOTICE. So notices about functions being deprecated or undefined array indexes are accepted.
-* Use Google - Some challenges are copies of other challenges on the Internet. Or they are much the same. So you can get some inspiration of sometimes complete challenges.
+* Use Google. Some challenges are copies of other challenges on the Internet. Or they are much the same. So you can get some inspiration of sometimes complete challenges.
 * Most of the time the less variables you use will result in a smaller solution in bytes. Ask yourself these questions: Do I really need them, or might the value of this variable also be derived from any other variable? Can I combine two values into one in order to save even 1 byte?
 
 
