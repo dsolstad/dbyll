@@ -2,6 +2,10 @@
 layout: post
 title: Tutorial - Hardcoded Windows Shellcodes (32bit)
 published: false
+categories: [shellcode]
+tags: [reverseshell, bindshell, hardcoded]
+fullview: true
+comments: true
 ---
 
 ## Intro
