@@ -485,7 +485,7 @@ $ ld -m i386pe bind.o -o bind.exe
 
 ### Test standalone executable
 
-Simply double click on the executible and a cmd terminal will appear.  
+Simply double click on the executable and a cmd terminal will appear.  
 ![_config.yml]({{ site.baseurl }}/images/bindshell2.png)
 
 Connect to it using netcat and we got a shell!  
