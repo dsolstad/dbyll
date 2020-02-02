@@ -18,7 +18,7 @@ Challenge description: Print out the 100 first numbers in <a href="https://paste
 
 ![_config.yml]({{ site.baseurl }}/images/cantor.png)
 
-Leading submission with 57 byte:
+Leading submission with 57 bytes:
 {% highlight php %}
 <?for($f=µ;$ö++.$µ++-49;--$$f?--$$f:$f^=C)echo"$ö / $µ
 ";
