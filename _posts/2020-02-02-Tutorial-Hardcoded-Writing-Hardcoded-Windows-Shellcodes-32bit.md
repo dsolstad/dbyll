@@ -73,7 +73,7 @@ We want our first version of the shellcode to work as a standalone executable to
 
 ## LoadLibraryA(_In_ LPCTSTR lpFileName)
 
-Docs: https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-loadlibrarya
+Docs: <a href="https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-loadlibrarya">https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-loadlibrarya</a>
 
 This system call loads a DLL file into the memory. It takes one argument, which is the name of the file.
 In case you are not familiar with Windows system calls, the basic idea is to fill up the stack with arguments before calling the function at the given address, referenced in the table created earlier.
@@ -116,8 +116,8 @@ This LoadLibraryA() system call is very straight forward. The stack looks like t
 
 ## WSAStartup(WORD wVersionRequired, LPWSADATA lpWSAData)
 
-Docs: https://docs.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-wsastartup  
-Docs: https://docs.microsoft.com/en-us/windows/win32/api/winsock/ns-winsock-wsadata
+Docs: <a href="https://docs.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-wsastartup">https://docs.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-wsastartup</a> 
+Docs: <a href="https://docs.microsoft.com/en-us/windows/win32/api/winsock/ns-winsock-wsadata">https://docs.microsoft.com/en-us/windows/win32/api/winsock/ns-winsock-wsadata</a>
 
 The next system call we need to run is WSAStartup() to initialize the use of sockets. It takes two arguments, where the first is the version we are going to use and the second is a pointer to a place to store socket data.
 
@@ -140,7 +140,7 @@ I'm not sure why this trick works, but by inverting the logic it works in our fa
 
 ### WSASocketA(int af, int type, int protocol, LPWSAPROTOCOL_INFOA lpProtocolInfo, GROUP g, DWORD dwFlags)
 
-Docs: https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-wsasocketa
+Docs: <a href="https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-wsasocketa">https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-wsasocketa</a>
 
 Now we need to create a socket. This function takes a few parameters, like information about the socket type. 
 
@@ -161,8 +161,8 @@ The pointer to the socket handler will be stored in eax, which we copy into ebx 
 
 ## bind(SOCKET s, const sockaddr *addr, int namelen)
 
-Docs: https://docs.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-bind  
-Docs: https://docs.microsoft.com/en-us/windows/win32/winsock/sockaddr-2
+Docs: <a href="https://docs.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-bind">https://docs.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-bind</a>  
+Docs: <a href="https://docs.microsoft.com/en-us/windows/win32/winsock/sockaddr-2">https://docs.microsoft.com/en-us/windows/win32/winsock/sockaddr-2</a>
 
 Next up we need to bind the socket. The first argument is the pointer to the socket handler, which we have stored in EBX. In the second argument, we need to define three things: 
 + The port number, which in this case will be 4444 (0x5c11 in hex)
@@ -244,7 +244,7 @@ The stack looks like this right before calling bind():
 
 ## listen(SOCKET s, int backlog)
 
-Docs: https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-listen
+Docs: <a href="https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-listen">https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-listen</a>
 
 To get incoming connections, we need to call the listen() function, which is very simple to implement.
 
@@ -257,7 +257,7 @@ call eax
 
 ### accept(SOCKET s, sockaddr *addr, int *addrlen)
 
-Docs: https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-accept
+Docs: <a href="https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-accept">https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-accept</a>
 
 As the docs says, "The accept function permits an incoming connection attempt on a socket". We need to store the return value here, which gets stored in EAX. We store a copy in EBX for later use.
 
@@ -275,7 +275,7 @@ Now finally we have the socket up and running. Time to implement the shell part.
 
 ## SetStdHandle(_In_ DWORD nStdHandle, _In_ HANDLE hHandle)
 
-Docs: https://docs.microsoft.com/en-us/windows/console/setstdhandle
+Docs: <a href="https://docs.microsoft.com/en-us/windows/console/setstdhandle">https://docs.microsoft.com/en-us/windows/console/setstdhandle</a>
 
 We will call this function three times to set STD_INPUT, STD_OUTPUT and STD_ERROR to the accepted socket connection.
 
@@ -297,7 +297,7 @@ call edx
 
 ## system(const char *command)
 
-Docs: https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/system-wsystem?view=vs-2019
+Docs: <a href="https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/system-wsystem?view=vs-2019">https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/system-wsystem?view=vs-2019</a>
 
 The final system call we need to call is the actual execution of OS commands. It takes one argument which is the a pointer to a command string. If you remember earlier, we had to deal with a filename string needed to be terminated with a null byte. Here we will also do some maneuvering to mitigate null bytes in the code.
 
@@ -523,7 +523,7 @@ For the reverse shell, we will reuse a lot from the bind shell code. In fact, we
 
 ## connect(SOCKET s, const sockaddr *name, int namelen);
 
-Docs: https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-connect
+Docs: <a href="https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-connect">https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-connect</a>
 
 The connect system call connects to a socket. It takes three arguments and looks more or less like bind().
 
