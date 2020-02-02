@@ -488,11 +488,11 @@ $ ld -m i386pe bind.o -o bind.exe
 
 ### Test standalone executable
 
-Simply double click on the executible and a cmd terminal will appear.
+Simply double click on the executible and a cmd terminal will appear.  
 ![_config.yml]({{ site.baseurl }}/images/bindshell2.png)
 
-Connect to it using netcat and we got a shell!
-![_config.yml]({{ site.baseurl }}/images/bindshell2.png)
+Connect to it using netcat and we got a shell!  
+![_config.yml]({{ site.baseurl }}/images/bindshell1.png)
 
 If we were going to use the shellcode as a payload for an exploit, then we can easily reduce the size by removing the code to load the socket library (LoadLibraryA()) and the socket startup call (WSAStartup()). This is because the target vulnerable software probably has already loaded the ws2_32.dll library and ran a socket startup call. This can be confirmed with the following command, which will display all loaded DLLs by the executable:
 
