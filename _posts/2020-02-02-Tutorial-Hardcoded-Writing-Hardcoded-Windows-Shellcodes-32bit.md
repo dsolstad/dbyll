@@ -469,8 +469,8 @@ call eax
 
 Time to compile this thing. This can be done on Windows by downloading the following tools: 
 
-+<a href="http://mingw.org/category/wiki/download">ld.exe</a>
-+<a href="https://www.nasm.us/pub/nasm/releasebuilds/">nasm.exe</a>
++ <a href="http://mingw.org/category/wiki/download">ld.exe</a>
++ <a href="https://www.nasm.us/pub/nasm/releasebuilds/">nasm.exe</a>
 
 ```
 > nasm.exe -f win32 -o bind.obj bind.asm
