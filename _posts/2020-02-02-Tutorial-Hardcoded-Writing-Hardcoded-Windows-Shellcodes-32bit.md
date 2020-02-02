@@ -113,7 +113,7 @@ This LoadLibraryA() system call is very straight forward. The stack looks like t
 
 ## WSAStartup(WORD wVersionRequired, LPWSADATA lpWSAData)
 
-Docs: <a href="https://docs.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-wsastartup">https://docs.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-wsastartup</a> 
+Docs: <a href="https://docs.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-wsastartup">https://docs.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-wsastartup</a>  
 Docs: <a href="https://docs.microsoft.com/en-us/windows/win32/api/winsock/ns-winsock-wsadata">https://docs.microsoft.com/en-us/windows/win32/api/winsock/ns-winsock-wsadata</a>
 
 The next system call we need to run is WSAStartup() to initialize the use of sockets. It takes two arguments, where the first is the version we are going to use and the second is a pointer to a place to store socket data.
