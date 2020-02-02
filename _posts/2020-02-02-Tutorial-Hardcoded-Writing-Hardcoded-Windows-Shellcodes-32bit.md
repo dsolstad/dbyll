@@ -49,20 +49,20 @@ ws2_32.dll:
   WSAStartup()            71AB6a55
   WSAGetLastError()       71AB3CCE
 
- kernel32.dll:
+kernel32.dll:
   LoadLibraryA()          7C801D7B
   ExitProcess()           7C81CAFA
   WaitForSingleObject()   7C802530
   CreateProcessA()        7C80236B
   SetStdHandle()          7C81D363
 
- msvcrt.dll:       
+msvcrt.dll:       
   system()                77C293C7
 ```
 
 # Shellcoding
 
-I won't go in depths about shellcoding in general here, but when you write shellcode for an exploit, you need to take certain precautions. For instance, hardcoding null bytes (0x00) will terminate strings and will most certain break the code. Also, you can't store strings like you would normally. Instead you can tricks, such as jmp-call-pop or pushing strings on the stack or to registers. I would recommend the course SLAE32 from PentesterAcademy to get a deeper understanding of shellcoding.
+I won't go in depths about shellcoding in general here, but when you write shellcode for an exploit, you need to take certain precautions. For instance, hardcoding null bytes (0x00) will terminate strings and will most certain break the code. Also, you can't store strings like you would normally. Instead you can tricks, such as jmp-call-pop or pushing strings on the stack or to registers. I would recommend the course <a href="https://www.pentesteracademy.com/course?id=3">SLAE32 from PentesterAcademy</a> to get a deeper understanding of shellcoding.
 
 # Bindshell (port 4444)
 
@@ -95,7 +95,7 @@ push 0x00003233 "32\0\0"
 push 0x5f327377 "ws2_"
 ```
 
-Bytes. Notice the nulls:
+Notice the nulls in pure hex bytes:
 ```
 6833320000687773325F
 ```
@@ -126,7 +126,7 @@ mov eax, 0x71ab6a55 ; Address to WSAStartup()
 call eax
 ```
 
-The first instruction is `add esp, 0xFFFFFE70`, which is way of creating space on the stack without generating null bytes. The normal way of achieving this would be to subtract a value from ESP (remember the stack grows downwards). However, this results in null bytes:
+The first instruction is `add esp, 0xFFFFFE70`, which is a way of creating space on the stack without generating null bytes. The normal way of achieving this would be to subtract a value from ESP (remember the stack grows downwards). However, this results in null bytes:
 ```
 nasm > sub esp, 0x190
 00000000  81EC90010000      sub esp,0x190
@@ -349,7 +349,7 @@ ESP/EAX -> 0022FE20    00646D63   "cmd\0"
            0022FE28    00000000
 ```
 
-`push eax` pushes the address of the "cmd\0" string is pushed on the stack and overwrites the previous trash there.
+`push eax` pushes the address of the "cmd\0" string on the stack and overwrites the previous trash there.
 ```
        Addr        Value      Ascii
 ESP -> 0022FE1C    0022FE20   
@@ -561,5 +561,5 @@ $ for i in $(objdump -d reverse.exe | grep "^ " | cut -f2); do echo -n '\x'$i; d
 ```
 
 
-Further reading:
-http://www.hick.org/code/skape/papers/win32-shellcode.pdf
+Highly recommended read about shellcoding:
+<a href="http://www.hick.org/code/skape/papers/win32-shellcode.pdf">http://www.hick.org/code/skape/papers/win32-shellcode.pdf</a>
