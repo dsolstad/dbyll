@@ -11,7 +11,6 @@ After doing the Offensive Security courses PWK and CTP I felt an urge to create 
   
 All the machines have names from a particular TV show and the machines somewhat share the personalities with the characters in that show. 
   
-The machines can be found here http://isz.no/vm or here https://www.vulnhub.com/series/sp,189/
+The machines can be found here <a href="http://isz.no/vm">http://isz.no/vm</a> or here <a href="https://www.vulnhub.com/series/sp,189/">https://www.vulnhub.com/series/sp,189/</a>
   
 Lastly, I want to give the awesome people at VulnHub a shout-out for hosting the machines!
-
