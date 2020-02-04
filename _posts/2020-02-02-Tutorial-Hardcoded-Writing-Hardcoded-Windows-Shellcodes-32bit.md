@@ -11,7 +11,7 @@ This article is a walkthrough on how to write shellcodes for Windows, both rever
   
 You will notice that the shellcodes presented in this article are respectively 92 (reverse) and 111 (bind) bytes long. You might be wondering why Windows shellcodes from msfvenom is about 300-400 bytes in comparison. This is because the payloads from msfvenom will work on any Windows version. It has extra code that will automatically find addresses for DLLs and system calls, which is different on every Windows release. The shellcodes in this article has hardcoded addresses, which will only work for one Windows version, which in this guide will be Windows XP SP3 (eng). Why not just stick to shellcodes from msfvenom? Most often you will have enough space for your payload and you can use a shellcode from msfvenom, but in some cases you won't have enough space, thus unless you find a small hardcoded shellcode, you need to create your own. If you are interesting in learning how to write shellcodes that automatically finds the necessary addresses, like those from msfvenom, you can read this <a href="https://idafchev.github.io/exploit/2017/09/26/writing_windows_shellcode.html">amazing article</a>.
 
-By the way, I'm no expert in Assembly and shellcoding. I have learned this just from reading articles, trying stuff and debugging. If you find something wrong, please let me know!
+By the way, I'm no expert in Assembly and shellcoding - If you find something wrong, please let me know!
 
 # Prework: Finding system calls and addresses
 
