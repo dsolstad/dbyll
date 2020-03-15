@@ -2,8 +2,9 @@
 layout: post
 title: Vulnerable Machines (SP series)
 categories: [vm]
-tags: [vulnhub, exploit]
+tags: [vulnhub]
 fullview: true
+description: My contribution of vulnerable machines to VulnHub
 comments: true
 ---
 
