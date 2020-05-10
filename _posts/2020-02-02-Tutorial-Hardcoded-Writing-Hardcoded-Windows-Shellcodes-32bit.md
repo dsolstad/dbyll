@@ -4,6 +4,7 @@ title: Tutorial - Writing Hardcoded Windows Shellcodes (32bit)
 published: true
 categories: [shellcode]
 tags: [reverseshell, bindshell, hardcoded]
+description: A tutorial of writing hardcoded shellcodes for Windows
 comments: true
 ---
 
