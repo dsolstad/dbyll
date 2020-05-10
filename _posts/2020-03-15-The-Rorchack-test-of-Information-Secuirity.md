@@ -9,7 +9,7 @@ comments: true
 
 I follow a lot of information security professionals on LinkedIn, and some weeks ago I saw a post with an image in my feed. I will give you a moment take a look yourself before reading on. 
 
-![_config.yml]({{ site.baseurl }}/images/lock.jpg)
+![_config.yml]({{ site.baseurl }}/images/lock.png)
 
 The image followed a text saying that unlocking one lock will unlock the whole thing, and then drawing a parallel to cyber security, where an attacker would only need to compromise one system to gain access to an organization. This is indeed correct for the picture, but let's try to look at this with a non-security tunnel vision mindset.
 
@@ -17,7 +17,7 @@ First off, let's try to understand what these locks are protecting. It seems to 
 
 ![_config.yml]({{ site.baseurl }}/images/chain1.png)
 
-The same principle applies - if you break one lock, you break the whole chain, thus opening the gate. If a new person would need access to this restricted area, that person would need to get in touch with one of the key holders to open their lock, and the new person would add their lock to the chain. This new person could be an owner of a new house built in the restricted zone, or even the fire department. If anyone would lose their key, the same principle applies, the person would buy a new lock and get in touch with anyone of the key holders to unlock and add the new lock. All this at a low cost and without a central key administration.
+The same principle applies - if you break one lock, you break the whole chain, thus opening the gate. If a new person would need access to this restricted area, that person would need to get in touch with one of the key holders to open their lock, and the new person would add their lock to the chain. This new person could be an owner of a new house built in the restricted zone, or even the fire department. If anyone would lose their key, the person would buy a new lock and get in touch with anyone of the key holders to unlock the chain and to add the new lock. All this at a low cost and without a central key administration.
 
 Now we can look at the opposite principle, with one lock and multiple cloned keys, one for each household, like the image below illustrates.
 
