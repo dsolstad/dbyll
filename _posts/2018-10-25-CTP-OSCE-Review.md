@@ -3,6 +3,7 @@ layout: post
 title: Offensive Security CTP/OSCE Review
 categories: [certifications]
 tags: [offsec, ctp, osce, review]
+description: My review of Offensive Security CTP/OSCE
 fullview: true
 ---
 
