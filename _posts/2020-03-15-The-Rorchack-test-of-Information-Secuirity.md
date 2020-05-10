@@ -13,7 +13,7 @@ I follow a lot of information security professionals on LinkedIn, and some weeks
 
 The image followed a text saying that unlocking one lock will unlock the whole thing, and then drawing a parallel to cyber security, where an attacker would only need to compromise one system to gain access to an organization. This is indeed correct for the picture, but let's try to look at this with a non-security tunnel vision mindset.
 
-First off, let's try to understand what these locks are protecting. It seems to be some sort of outdoor gate to reach a restricted area. By example we can imagine that it's a gate to access a private zone with multiple holiday houses, and the gate is to access it by car. The locks are of different kind and are numbered, suggesting there is one unique key for each lock. To further the example, each household has their own unique key. We can simplify the image by replacing it with the following:
+First off, let's try to understand what these locks are protecting. It seems to be some sort of outdoor gate to reach a restricted area. The locks are of different kind and are numbered, suggesting there is one unique key for each lock. By example we can imagine that it's a gate to access a private zone with multiple holiday houses, and the gate is to access it by car, with each household having their own unique key. We can simplify the above image by replacing it with the following:
 
 ![_config.yml]({{ site.baseurl }}/images/chain1.png)
 
