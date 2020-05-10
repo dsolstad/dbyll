@@ -2,7 +2,7 @@
 layout: post
 title: The Rorschach Test of Information Security
 published: true
-categories: [information security]
+categories: [information-security]
 description: Analysis of an image that popped up in my LinkedIn feed
 comments: true
 ---
@@ -27,5 +27,4 @@ Now, if a new house owner would need access, they would need to apply to get a n
 
 You can argue that in this example the central administration could already have cloned keys ready for new households, and if someone loses their key, the administration wouldn't really care that much and just give them a new key. However, this might not be the case in other examples, where the lock is protecting something of more value.
 
-The bottom line is: Avoid tunnel vision - Try to think from multiple perspectives before you push your security down the throat at someone.
-  
+The bottom line is: Avoid tunnel vision - Try to think from multiple perspectives, be more agile, and think about that it could be a reason for why things are like they are. 
