@@ -25,7 +25,7 @@ Now we can look at the opposite principle, with one lock and multiple cloned key
 
 Now, if a new house owner would need access, they would need to apply to get a new cloned key. This could take some time and they might need to go far away to get the new key. If someone loses their key, the administration would need to change the lock, clone new keys and locate households to distribute the new keys. Very cost and time inefficient.
 
-You can argue that in this example the central administration could already have cloned keys ready for new households, and if someone loses their key, the administration wouldn't really care that much and just give them a new key. However, this might not be the case in other examples, where the lock is protecting something of more risk.
+You can argue that in this example the central administration could already have cloned keys ready for new households, and if someone loses their key, the administration wouldn't really care that much and just give them a new key. However, this might not be the case in other examples, where the lock is protecting something of more value.
 
 The bottom line is: Avoid tunnel vision - Try to think from multiple perspectives before you push your security down the throat at someone.
   
