@@ -21,6 +21,8 @@ We can simplify the above image by replacing it with the following:
 ![_config.yml]({{ site.baseurl }}/images/chain1.png)
 
 The same principle applies - if you break one lock, you break the whole chain, thus opening the gate. If a new person would need access to this restricted area, that person would need to get in touch with one of the key holders to open their lock, and the new person would add their lock to the chain. This new person could be an owner of a new house built in the restricted zone, or even the fire department. If anyone would lose their key, the person would buy a new lock and get in touch with anyone of the key holders to unlock the chain and to add the new lock. All this at a low cost and without a central key administration.
+  
+Another key point here is that if anyone forgets to lock the gate, it becomes evidently who was responsible.
 
 ## Centralized system
 Now we can look at the opposite principle, with one lock and multiple cloned keys, one for each household, like the image below illustrates.
