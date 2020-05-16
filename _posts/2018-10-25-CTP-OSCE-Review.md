@@ -1,10 +1,11 @@
 ---
 layout: post
+published: true
 title: Offensive Security CTP/OSCE Review
 categories: [certifications]
 tags: [offsec, ctp, osce, review]
 description: My review of Offensive Security's CTP/OSCE
-fullview: true
+fullview: false
 ---
 
 After I woke up on October the 16th, I had a new unread email from Offensive Security in my inbox. It was a perfect start of the day knowing that I had passed the horrifying 48 hour OSCE exam. Overall, Cracking the Perimeter was a great course. It was a hard journey and I learned a lot, especially about assembly, shellcoding and buffer overflows. I'm not saying that the course is only about buffer overflows, but out of the nine modules, you are staring at assembly code in a debugger in six of them. The three other modules were about advanced web and man-in-the-middle network attacks, which was really good and I wanted more of.
