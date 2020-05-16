@@ -14,7 +14,7 @@ You will notice that the shellcodes presented in this article are respectively 9
 
 By the way, I'm no expert in Assembly and shellcoding - If you find something wrong, please let me know!
 
-# Prework: Finding system calls and addresses
+# Prework: Finding system calls, DLLs and addresses
 
 Before continuing, you should have a copy of the target Windows version ready that we will be using for debugging. 
   
