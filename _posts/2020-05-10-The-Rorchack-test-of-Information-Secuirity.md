@@ -5,6 +5,7 @@ published: true
 categories: [information-security]
 description: Analysis of an image that popped up in my LinkedIn feed
 comments: true
+fullview: false
 ---
 
 I follow a lot of information security professionals on LinkedIn, and some weeks ago I saw a post with an image in my feed. I will give you a moment take a look yourself before reading on. 
