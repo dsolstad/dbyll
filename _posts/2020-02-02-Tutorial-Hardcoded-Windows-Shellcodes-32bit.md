@@ -67,7 +67,7 @@ msvcrt.dll:
 
 # Shellcoding in general
 
-I won't go in depths about shellcoding in general here, but when you write shellcode for an exploit, you need to take certain precautions. For instance, hardcoding null bytes (0x00) will terminate strings and will most certain break the code. Also, you can't store strings like you would normally. Instead you can tricks, such as jmp-call-pop or pushing strings on the stack or to registers. I will explain where I do tricks to mitigate null bytes throughout the article.
+I won't go in depths about shellcoding in general here, but when you write shellcode, you need to take certain precautions that you wouldn't normally think about when writing traditional assembly code. For instance, hardcoding null bytes (0x00) will terminate strings and will most certain break the code. Also, you can't store strings like you would normally. Instead you can use tricks, such as jmp-call-pop or pushing strings on the stack or to registers. I will explain where I do tricks to mitigate null bytes throughout the article.
 
 # Building the bindshell (port 4444)
 
