@@ -13,9 +13,18 @@ Most of them are probably well known, but I have rewritten them in my own words.
 
 ## Blue Eyes
 
-xkcd.com's infamous Blue Eyes puzzle is hard, mind bending and beautiful. I have written an article about this puzzle before, where I presented my version of the puzzle text, my explanation of the official solution and my alternative solution. Check it out [here].(https://dsolstad.com/puzzle/2017/02/24/Riddles-in-the-Dark-Blue-Eyes.html)
+xkcd.com's infamous Blue Eyes puzzle is hard, mind bending and beautiful. I have written an article about this puzzle before, where I presented my version of the puzzle text, my explanation of the official solution and my alternative solution. Check it out [here](https://dsolstad.com/puzzle/2017/02/24/Riddles-in-the-Dark-Blue-Eyes.html).
 
 ## The King and his Servants
+
+A king has 100 servants and wants to find out how smart they are. He says to them that they will be getting a hat that is either red or blue placed on their head. They will then be standing in a line, facing the back of the head to the one in front of them. Starting from the servant in the back, the king will ask them which color they have on their hat. If they answer wrong, the servant would be shot. The amount of red and blue hats are random, and they cannot see their own hat color. They cannot communicate while standing there, other than answering "red" or "blue", but they can come up with a plan beforehand to make as many survive as possible. What is the plan and how many can be guaranteed to survive?
+
+![Servants](/images/servants.png)
+
+<details>
+  <summary>Solution</summary>
+    The
+</details>
 
 ## Three Guys at the Hotel
 
@@ -46,6 +55,7 @@ A mountain climber is on top of a mountain which is 200 meters tall. 100 meters 
 <details>
   <summary>Solution</summary>
   He cuts the rope so that he has one that is 100 meters and one of 50 meters. He then ties the 50 meter rope to the top hook and creates a loop of the 100 rope, which he ties the 50 meter rope to. The length of this joint rope is now 100 meters and he can get down to the platform. He can now untie or cut the 100 meter rope loop and drag in it until it comes off the 50 meter rope. He can now get to the bottom by tying the 100 meter rope to the hook at the platform and get safe down.
+
 ![Climber solution](/images/climber_sol.png)
 </details>
 
@@ -82,14 +92,22 @@ $b=a
 ```
 </details>
 
-## The Twins
+## The Brothers
+
+You are on the way to the beautiful city Oslo and are at a crossroads, where the road splits in two. You don't know the way. However, there are two brothers living next to the road who knows. One of them always tells the truth and the other one always lies. You don't know who is who and you can ask one of them only one question. What can you ask to get in the right direction to Oslo?
+
+<details>
+  <summary>Solution</summary>
+ You can simply ask one of them "What would your brother say was the way to Oslo?" and then go the other way of what was answered.
+ If you asked the brother who always told the truth, then he would say the answer that the lying brother would give, which would be the wrong way. If you would ask the lying brother, he would lie about the correct answer the honest brother would give, and then give you the wrong path. 
+</details>
 
 ## The Ball and the Baseball bat
 A ball and a baseball bat costs $1.10 in total. The bat costs $1 more than the ball. How much does the bat cost?
 
 <details>
   <summary>Solution</summary>
-
+  Normally people jump to the conclusion that the ball costs $0.10, and you probably did too.
   Ball = $0.05
   Bat = $1.05
   Total = $1.10
@@ -103,6 +121,8 @@ Imagine that the following lines are matchsticks. The task it to move to of them
 
 <details>
   <summary>Solution</summary>
+
+The solution is actually very simple, but people usually spend way to much time solving it. 
 
 ![Squares solution](/images/squares_sol.png)
 </details>
@@ -122,7 +142,8 @@ A man has a house and on the wall there is a square windows that is 1 meter tall
 
 <details>
   <summary>Solution</summary>
-  
-  This is probably the weakest puzzle on the list, with a bit of an unsatisfying answer, but I still find it amusing.
-  ![Squares solution](/images/window_sol.png)
+
+ This is probably the weakest puzzle on the list, with a bit of an unsatisfying answer, but I still find it amusing.
+
+![Squares solution](/images/window_sol.png)
 </details>
