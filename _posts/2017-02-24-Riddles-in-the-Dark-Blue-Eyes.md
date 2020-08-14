@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Riddles in the Dark - Blue Eyes
-categories: [riddle]
+categories: [puzzle]
 tags: [xkcd, blueeyes]
 description: My alternative answer to XKCD's Blue Eyes riddle.
 ---
