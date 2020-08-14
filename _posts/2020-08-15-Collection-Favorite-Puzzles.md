@@ -19,6 +19,11 @@ Most of them are probably well known, but I have rewritten them in my own words.
 
 ## Three Guys at the Hotel
 
+<details>
+  <summary>Solution</summary>
+    Solution text
+</details>
+
 ## The Blind Man with the Pills
 
 ## The Man and the Window
