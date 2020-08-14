@@ -46,7 +46,7 @@ A mountain climber is on top of a mountain which is 200 meters tall. 100 meters 
 <details>
   <summary>Solution</summary>
   He cuts the rope so that he has one that is 100 meters and one of 50 meters. He then ties the 50 meter rope to the top hook and creates a loop of the 100 rope, which he ties the 50 meter rope to. The length of this joint rope is now 100 meters and he can get down to the platform. He can now untie or cut the 100 meter rope loop and drag in it until it comes off the 50 meter rope. He can now get to the bottom by tying the 100 meter rope to the hook at the platform and get safe down.
-![Tux, the Linux mascot](/images/squares_sol.png)
+![Climber solution](/images/climber_sol.png)
 </details>
 
 ## Variable Swapping
@@ -60,7 +60,7 @@ b = 'b';
 
 <details>
   <summary>Solution</summary>
-  
+
   The ^ sign is the XOR operator, which will convert the character to binary in C-based languages. However, with digits it will probably work in any language and you can use basic addition and subtraction as well.
 ```php
 <?php
@@ -122,6 +122,7 @@ A man has a house and on the wall there is a square windows that is 1 meter tall
 
 <details>
   <summary>Solution</summary>
+  
   This is probably the weakest puzzle on the list, with a bit of an unsatisfying answer, but I still find it amusing.
   ![Squares solution](/images/window_sol.png)
 </details>
