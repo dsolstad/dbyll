@@ -115,7 +115,7 @@ A ball and a baseball bat costs $1.10 in total. The bat costs $1 more than the b
 
 ## Squares
 
-Imagine that the following lines are matchsticks. The task it to move to of them to form 4 equally big fully squares, with no spare parts and no partial squares.
+Imagine that the following lines are matchsticks. The task it to move two of them to form 4 equally big fully squares, with no spare parts and no partial squares.
 
 ![Squares](/images/squares.png)
 
