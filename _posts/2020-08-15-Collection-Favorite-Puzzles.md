@@ -17,13 +17,13 @@ xkcd.com's infamous Blue Eyes puzzle is hard, mind bending and beautiful. I have
 
 ## The King and his Servants
 
-A king has 100 servants and wants to find out how smart they are. He says to them that they will be getting a hat that is either red or blue placed on their head. They will then be standing in a line, facing the back of the head to the one in front of them. Starting from the servant in the back, the king will ask them which color they have on their hat. If they answer wrong, the servant would be shot. The amount of red and blue hats are random, and they cannot see their own hat color. They cannot communicate while standing there, other than answering "red" or "blue", but they can come up with a plan beforehand to make as many survive as possible. What is the plan and how many can be guaranteed to survive?
+A king has 100 servants and wants to find out how smart they are. He says to them that they will be getting a hat that is randomly either red or blue placed on their head. They will then be standing in a line, facing the back of the head to the one in front of them. Starting from the servant in the back, the king will ask them which color they have on their hat. If they answer wrong, the servant would be shot. The amount of red and blue hats are random, and they cannot see their own hat color, but they can see every hat in front of them. They can also hear what the person behind them answered. They cannot communicate while standing there, other than answering "red" or "blue", but they can come up with a strategy beforehand to make as many survive as possible. How can they guarantee that 99 servants has 100% chance of surviving?
 
 ![Servants](/images/servants.png)
 
 <details>
   <summary>Solution</summary>
-    The
+    This video shows a good explanation of the solution: https://www.youtube.com/watch?v=3-avaCx4Czk
 </details>
 
 ## Three Guys at the Hotel
