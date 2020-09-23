@@ -49,13 +49,13 @@ If you think you get the answer you can try asking yourself these questions quot
 
 ## My Alternative Answer
 
-It starts with one guy just standing up. Then another guy will stand next beside him. Let's say one has blue and one has brown eyes. They have now formed this row: **B**/B (Bold being blue and regular brown)  
+It starts with one guy just standing up. Then another guy will stand next beside him. Let's say one has blue and one has brown eyes. They have now formed this row: **BL**/BR (Bold being blue and regular brown)  
     
-The third person will see the colors of these guys and he will place himself in the middle. It doesn't matter which color his eyes are, but let's say they are brown. Updated Row: **B**/B/B
+The third person will see the colors of these guys and he will place himself in the middle. It doesn't matter which color his eyes are, but let's say they are brown. Updated Row: **BL**/BR/BR
   
 If the two initial guys have both the same color, the third guy will just move to one of either side.  
   
-The forth guy comes and he will place himself in the middle where blue and brown eyed are separated. His goal is to have one blue eyed and one brown eyed on each side. Let's say he has blue eyes, which makes the row like this: **B**/**B**/B/B
+The forth guy comes and he will place himself in the middle where blue and brown eyed are separated. His goal is to have one blue eyed and one brown eyed on each side. Let's say he has blue eyes, which makes the row like this: **BL**/**BL**/BR/BR
   
 The next guy will do the same and so on, until everyone is standing in the row, where the 100 men from the left is blue and the 100 men on the right is brown eyed.  
   
