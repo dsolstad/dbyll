@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Walkthrough - Leopold
+title: Walkthrough of Leopold
 categories: [vm]
 tags: [vulnhub][sp][leopold]
 fullview: false
