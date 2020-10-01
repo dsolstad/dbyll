@@ -95,7 +95,7 @@ Here we have the request leopold is making. There is two key pieces of informati
 
 ## Initial Access
 
-Searching for "firefox" in searchsploit gives many possible alternatives and after some research, the "toString console.time Privileged JavaScript Injection" exploit seems to be a match for the Firefox version in question. It even has a Metasploit module. The module sets up a webserver on the attacking machine to serves the browser exploit to visitors. Let's change the SRVPORT to 80, which was the port leopold was trying to reach, and and URIPATH to "/", before running it.
+Searching for "firefox" in searchsploit gives many possible alternatives and after some research, the "toString console.time Privileged JavaScript Injection" exploit seems to be a match for the Firefox version in question and there is even a Metasploit module for it. The module sets up a webserver on the attacking machine to serve the browser exploit to visitors. Let's change the SRVPORT to 80, which was the port leopold was trying to reach, and URIPATH to "/", before running it.
 
 ```
 msf5 exploit(multi/browser/firefox_tostring_console_injection) > options 
