@@ -71,25 +71,13 @@ b = 'b';
 <details>
   <summary>Solution</summary>
 
-  The ^ sign is the XOR operator, which will convert the character to binary in C-based languages. However, with digits it will probably work in any language and you can use basic addition and subtraction as well.
-<blockquote>
-<?php
-
-$a="a";
-$b="b";
-
-$a = $a ^ $b;
-$b = $a ^ $b;
-$a = $a ^ $b;
-
-print '$a=' . $a . "\n" . '$b=' . $b;
-
-// Output
-$a=b
-$b=a
-
-?>
-</blockquote>
+  The example below is written in PHP. The ^ sign is the XOR operator, which will convert the character to binary in C-based languages. However, with digits it will probably work in any language and you can use basic addition and subtraction as well.  
+$a="a";  
+$b="b";  
+$a = $a ^ $b;  
+$b = $a ^ $b;  
+$a = $a ^ $b;  
+print '$a=' . $a . "\n" . '$b=' . $b;  
 </details>
 
 ## The Brothers
