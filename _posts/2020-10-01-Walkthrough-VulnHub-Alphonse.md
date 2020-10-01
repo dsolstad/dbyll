@@ -2,7 +2,7 @@
 layout: post
 title: Walkthrough of Alphonse
 categories: [vm]
-tags: [vulnhub][sp][alphonse]
+tags: [vulnhub,sp,alphonse]
 fullview: false
 description: A walkthrough the alphonse VM on VulnHub
 comments: true
