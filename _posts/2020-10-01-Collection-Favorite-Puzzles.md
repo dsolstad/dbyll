@@ -1,7 +1,7 @@
 ---
 layout: post
 title: A collection of my favorite logical puzzles
-published: false
+published: true
 categories: [puzzle]
 description: A collection of my favorite logical puzzles
 comments: true
@@ -100,17 +100,6 @@ You are on the way to the beautiful city Oslo and are at a crossroads, where the
   <summary>Solution</summary>
  You can simply ask one of them "What would your brother say was the way to Oslo?" and then go the other way of what was answered.
  If you asked the brother who always told the truth, then he would say the answer that the lying brother would give, which would be the wrong way. If you would ask the lying brother, he would lie about the correct answer the honest brother would give, and then give you the wrong path. 
-</details>
-
-## The Ball and the Baseball bat
-A ball and a baseball bat costs $1.10 in total. The bat costs $1 more than the ball. How much does the bat cost?
-
-<details>
-  <summary>Solution</summary>
-  Normally people jump to the conclusion that the ball costs $0.10, and you probably did too.
-  Ball = $0.05
-  Bat = $1.05
-  Total = $1.10
 </details>
 
 ## Squares
