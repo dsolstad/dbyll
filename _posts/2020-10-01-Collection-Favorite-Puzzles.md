@@ -72,7 +72,7 @@ b = 'b';
   <summary>Solution</summary>
 
   The ^ sign is the XOR operator, which will convert the character to binary in C-based languages. However, with digits it will probably work in any language and you can use basic addition and subtraction as well.
-```
+<blockquote>
 <?php
 
 $a="a";
@@ -89,7 +89,7 @@ $a=b
 $b=a
 
 ?>
-```
+</blockquote>
 </details>
 
 ## The Brothers
