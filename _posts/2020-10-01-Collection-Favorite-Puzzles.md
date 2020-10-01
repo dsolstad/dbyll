@@ -112,7 +112,6 @@ A man has a house and on the wall there is a square windows that is 1 meter tall
 <details>
   <summary>Solution</summary>
 
- This is probably the weakest puzzle on the list, with a bit of an unsatisfying answer, but I still find it amusing.
-
+ This is probably the weakest puzzle on the list, with a bit of an unsatisfying answer, but I still find it amusing.  
 ![Squares solution](/images/window_sol.png)
 </details>
