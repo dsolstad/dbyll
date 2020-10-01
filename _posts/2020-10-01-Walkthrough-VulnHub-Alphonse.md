@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Walkthrough - Alphonse
+title: Walkthrough of Alphonse
 categories: [vm]
 tags: [vulnhub][sp][alphonse]
 fullview: false
