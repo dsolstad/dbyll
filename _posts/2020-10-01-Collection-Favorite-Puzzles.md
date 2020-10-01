@@ -61,7 +61,7 @@ A mountain climber is on top of a mountain which is 200 meters tall. 100 meters 
 
 ## Variable Swapping
 
-This is more of a programming puzzle, but doesn't really require much programming skills. The task is simple: Two variables (a and b) can have any single value, be it a digit or a character. Swap the values of these variables without using any existing functions, arrays or creating new variables. Also, a,b=b,a is not allowed, as you can in Python. I have verified that it works in C/C++, PHP and Perl, so think in C-style languages.
+This is more of a programming puzzle, but doesn't really require much programming skills. The task is simple: Two variables (a and b) can have any single value, be it a digit or a character. Swap the values of these variables without using any existing functions, arrays or creating new variables. Also, a,b=b,a is not allowed, as you can do in Python. I have verified that it works in C/C++, PHP and Perl, so think in C-style languages.
 
 ```c
 a = 'a';
