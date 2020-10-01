@@ -92,8 +92,7 @@ Imagine that the following lines are matchsticks. The task it to move two of the
 <details>
   <summary>Solution</summary>
 
-The solution is actually very simple, but people usually spend way to much time solving it. 
-
+The solution is actually very simple, but people usually spend way to much time solving it.  
 ![Squares solution](/images/squares_sol.png)
 </details>
 
