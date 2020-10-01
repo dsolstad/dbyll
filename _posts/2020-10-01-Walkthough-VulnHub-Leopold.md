@@ -1,3 +1,13 @@
+---
+layout: post
+title: Walkthrough - Leopold
+categories: [vm]
+tags: [vulnhub][sp][leopold]
+fullview: false
+description: A walkthrough the leopold VM on VulnHub
+comments: true
+---
+
 # Walkthrough - Leopold
 
 Leopold was the second machine I created for my <a href="https://www.vulnhub.com/series/sp,189/">SP series</a> in late 2018, and I think it's the most popular of my machines. There are many walkthroughs out there for Leopold, but I wanted to show how I intended to solve it, but I have also made the walkthrough from an objective standpoint. Leopold is very different from any other VM that I have seen on VulnHub due to it's client-side aspect and will teach a real-world attack vector commonly used in penetration tests. Lastly, I would personally view this VM as easy in difficulty, but I have seen people complain about this. However, I think this is due to the unfamiliarity with this kind of exploitation.
