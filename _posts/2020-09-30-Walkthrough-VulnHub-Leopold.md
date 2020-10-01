@@ -3,7 +3,7 @@ layout: post
 title: Walkthrough of Leopold
 published: true
 categories: [vm]
-tags: [vulnhub][sp][leopold]
+tags: [vulnhub,sp,leopold]
 fullview: false
 description: A walkthrough the leopold VM on VulnHub
 comments: true
