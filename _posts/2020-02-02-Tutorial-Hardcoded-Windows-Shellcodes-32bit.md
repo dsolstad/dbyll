@@ -22,7 +22,7 @@ The steps in this guide is basically loading DLLs containing the system calls we
 
 If we scroll down, we learn that bind() is located in Ws2_32.dll. Now we can use the tool <a href="https://www.fuzzysecurity.com/tutorials/expDev/tools/arwin.rar">Arwin.exe</a> on the target system to figure out the address of the various system calls.
 
-```
+```text
 > arwin.exe ws2_32.dll bind
 arwin - win32 address resolution program - by steve hanna - v.01
 bind is located at 0x71ab4480 in ws2_32.dll
