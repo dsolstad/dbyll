@@ -43,7 +43,7 @@ LoadLibraryA is located at 0x7c801d7b in kernel32.dll
 
 If we continue this process, we have compiled a table of relevant system calls and their addresses:
 
-```c
+```perl
 ws2_32.dll:       
   closesocket()           71AB3E2B
   accept()                71AC1040
@@ -106,13 +106,13 @@ push 0x5f327377 ; "ws2_"
 ```
 
 Notice the nulls in pure hex bytes:
-```nasm
+```
 6833320000687773325F
 ```
 
 This LoadLibraryA() system call is very straight forward. The stack looks like the following before `call eax`, where a pointer to the filename string is on the top of the stack, as the first and only argument:
 
-```c
+```perl
    Addr        Value
    00000001    00000002 -----------------
 -> 00000002    00003233 (ASCII 32\0)    |
