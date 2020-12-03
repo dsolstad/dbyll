@@ -86,7 +86,7 @@ LoadLibraryA(_In_ LPCTSTR lpFileName)
 
 This system call loads a DLL file into the memory. It takes one argument, which is the name of the file.
 
-```assembly
+```nasm
 xor eax, eax        ; Clear eax
 mov ax, 0x3233      ; Store string "32" in AX (explanation below)
 push eax            ; Push string "32\0\0" on stack
