@@ -43,7 +43,7 @@ LoadLibraryA is located at 0x7c801d7b in kernel32.dll
 
 If we continue this process, we have compiled a table of relevant system calls and their addresses:
 
-```perl
+```c
 ws2_32.dll:       
   closesocket()           71AB3E2B
   accept()                71AC1040
@@ -80,7 +80,7 @@ We want our first version of the shellcode to work as a standalone executable to
 Documentation: <a href="https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-loadlibrarya">https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-loadlibrarya</a>
 
 Syntax:
-```perl
+```nasm
 LoadLibraryA(_In_ LPCTSTR lpFileName)
 ```
 
@@ -101,8 +101,8 @@ The `mov ax, 0x3233` operation stores the string "32" in the lowest 16 bits of E
 
 Assembly:
 ```nasm
-push 0x00003233 "32\0\0"
-push 0x5f327377 "ws2_"
+push 0x00003233 ; "32\0\0"
+push 0x5f327377 ; "ws2_"
 ```
 
 Notice the nulls in pure hex bytes:
@@ -142,7 +142,7 @@ call eax
 ```
 
 The first instruction is `add esp, 0xFFFFFE70`, which is a way of creating space on the stack without generating null bytes. The normal way of achieving this would be to subtract a value from ESP (remember the stack grows downwards). However, this results in null bytes:
-```nasm
+```
 nasm > sub esp, 0x190
 00000000  81EC90010000      sub esp,0x190
 ```
@@ -225,7 +225,7 @@ server.sin_port = htons(4444);         # 0x5c11
 ```
 
 What we need to do is to have a pointer to the following values and pass it as the second argument:
-```nasm
+```
 5c110002
 00000000
 ```
