@@ -112,7 +112,7 @@ Notice the nulls in pure hex bytes:
 
 This LoadLibraryA() system call is very straight forward. The stack looks like the following before `call eax`, where a pointer to the filename string is on the top of the stack, as the first and only argument:
 
-```
+```c
    Addr        Value
    00000001    00000002 -----------------
 -> 00000002    00003233 (ASCII 32\0)    |
