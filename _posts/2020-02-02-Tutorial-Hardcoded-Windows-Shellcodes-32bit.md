@@ -135,7 +135,7 @@ The next system call we need to run is WSAStartup() to initialize the use of soc
 
 ```nasm
 add esp, 0xFFFFFE70 ; Creating space for WSAData (400 bytes)
-push esp            ; Arg2 (lpWSAData) = pointer to WSData
+push esp            ; Arg2 (lpWSAData) = pointer to WSAData space
 push 0x101          ; Arg1 (wVersionRequired) = 1.1
 mov eax, 0x71ab6a55 ; Address to WSAStartup()
 call eax
