@@ -141,13 +141,13 @@ mov eax, 0x71ab6a55 ; Address to WSAStartup()
 call eax
 ```
 
-The first instruction is `add esp, 0xFFFFFE70`, which is a way of creating space on the stack without generating null bytes. The normal way of achieving this would be to subtract a value from ESP (remember the stack grows downwards). However, this results in null bytes:
+The first instruction is `add esp, 0xFFFFFE70`, which is a way of creating space (400 bytes) on the stack without generating null bytes. The normal way of achieving this would be to subtract a value from ESP (remember the stack grows downwards). However, this results in null bytes:
 ```text
 nasm > sub esp, 0x190
 00000000  81EC90010000      sub esp,0x190
 ```
 
-I'm not sure why this trick works, but by inverting the logic it works in our favor.
+I'm not sure why this trick works, but by inverting the logic it solves our problem:
 `0xFFFFFFFF - 0xFFFFFE70 = 0x18F = 399`
 
 ## System call: WSASocketA
