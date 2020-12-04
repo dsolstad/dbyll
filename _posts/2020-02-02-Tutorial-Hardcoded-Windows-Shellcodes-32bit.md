@@ -20,14 +20,14 @@ Before continuing, you should have a copy of the target Windows version ready th
   
 The steps in this guide is basically loading DLLs containing the system calls we require, and then calling each system call one by one. To figure out the needed DLLs, we first need to know which system calls we will be using. Since we are going to create sockets, we already know that we will be using system calls, such as bind() and listen(). A quick Google search on "bind socket microsoft" gives us the following documentation: <a href="https://docs.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-bind">https://docs.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-bind</a>
 
-If we scroll down, we learn that bind() is located in Ws2_32.dll. Now we can use the tool <a href="https://www.fuzzysecurity.com/tutorials/expDev/tools/arwin.rar">Arwin.exe</a> on the target system to figure out the address of the various system calls.
+If we scroll down, we learn that bind() is located in ws2_32.dll. Now we can use the tool <a href="https://www.fuzzysecurity.com/tutorials/expDev/tools/arwin.rar">Arwin.exe</a> on the target system to figure out the address of the various system calls.
 
-```text
+```nasm
 > arwin.exe ws2_32.dll bind
 arwin - win32 address resolution program - by steve hanna - v.01
 bind is located at 0x71ab4480 in ws2_32.dll
 ```
-```text
+```nasm
 > arwin.exe ws2_32.dll listen
 arwin - win32 address resolution program - by steve hanna - v.01
 listen is located at 0x71ab8cd3 in ws2_32.dll
@@ -35,7 +35,7 @@ listen is located at 0x71ab8cd3 in ws2_32.dll
 
 We also know that we are required to load this DLL, at least at this stage, and a Google search reveals the LoadLibraryA() system call: <a href="https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-loadlibrarya">https://docs.microsoft.com/en-us/windows/win32/api/libloaderapi/nf-libloaderapi-loadlibrarya</a>, which is found in kernel32.dll:
 
-```text
+```nasm
 > arwin.exe kernel32.dll LoadLibraryA
 arwin - win32 address resolution program - by steve hanna - v.01
 LoadLibraryA is located at 0x7c801d7b in kernel32.dll
@@ -523,7 +523,7 @@ Time to compile this thing. This can be done on Windows by downloading the follo
 ```
 
 Or you can cross-compile this on a Linux box:
-```text
+```nasm
 $ nasm -f win32 bind.asm -o bind.o
 $ ld -m i386pe bind.o -o bind.exe
 ```
@@ -538,7 +538,7 @@ Connect to it using netcat and we got a shell!
 
 If we were going to use the shellcode as a payload for an exploit, then we can easily reduce the size by removing the code to load the socket library (LoadLibraryA()) and the socket startup call (WSAStartup()). This is because the target vulnerable software probably has already loaded the ws2_32.dll library and ran a socket startup call. This can be confirmed with the following command, which will display all loaded DLLs by the executable:
 
-```text
+```nasm
 > tasklist.exe /m /fi "imagename eq vulnerable.exe"
 ```
 
