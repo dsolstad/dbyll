@@ -166,9 +166,9 @@ xor eax, eax         ; Clear eax
 push eax             ; Arg6 (dwFlags) = 0
 push eax             ; Arg5 (g) = 0
 push eax             ; Arg4 (lpProtocolInfo) = 0
-push eax             ; Arg3 (protocol) = IPPROTO_TCP
-push 0x1             ; Arg2 (type) = SOCK_STREAM
-push 0x2             ; Arg1 (af) = AF_INET
+push eax             ; Arg3 (protocol) = 0 = IPPROTO_TCP
+push 0x1             ; Arg2 (type) = 1 = SOCK_STREAM
+push 0x2             ; Arg1 (af) = 2 = AF_INET
 mov eax, 0x71AB8B6A  ; Address to WSASocketA()
 call eax
 mov ebx, eax 
