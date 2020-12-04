@@ -97,7 +97,7 @@ call eax
 ```
 
 A trick was used here to insert null bytes to terminate the "ws2_32" string, without actually writing a null byte.
-The `mov ax, 0x3233` operation stores the string "32" in the lowest 16 bits of EAX (AX). The highest 16 bits are filled with 0x00 (due to the previous `xor eax, eax` operation). This will nicely terminate the string without us needing to hardcode a null byte in the code. If we would have done the following instead, it would have broken the shellcode:
+The `mov ax, 0x3233` operation stores the string "32" in the lowest 16 bits of EAX (AX). The highest 16 bits are filled with 0x00 (due to the previous `xor eax, eax` operation). This will nicely terminate the string without us needing to hardcode a null byte in the code. If we would have done the following instead, which is more rational, it would have broken the shellcode:
 
 Assembly:
 ```nasm
