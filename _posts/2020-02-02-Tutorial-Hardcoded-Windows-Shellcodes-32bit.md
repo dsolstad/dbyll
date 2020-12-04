@@ -186,51 +186,20 @@ Syntax:
 bind(SOCKET s, const sockaddr *addr, int namelen)
 ```
 
-Next up we need to bind the socket. The first argument is the pointer to the socket handler, which we have stored in EBX. In the second argument, we need to define three things: 
-+ The port number, which in this case will be 4444 (0x5c11 in hex)
-+ The address family. For IPv4 it should be set to AF_INET (0x0002 in hex)
-+ The IP address it will listen on. According to the docs, the INADDR_ANY constant should be used to make it listen on all interfaces. This constant holds the value 0.
+Next up we need to bind the socket. The first argument is the pointer to the socket handler, which we have stored in EBX. The second argument should be a pointer to these three values: 
++ The port number, which in this case will be 4444 (0x5c11)
++ The address family. For IPv4 it should be set to AF_INET (0x0002)
++ The IP address it will listen on, which we will set to INADDR_ANY (0x0000) to make the socket listen on all interfaces.
 
-The third argument is the size of the second argument, which will be 16 bytes (0x10 in hex).
-
-To make the *addr argument more clear, we can see what it would look like in C:
-```c
-struct in_addr {
-  union {
-    struct {
-      u_char s_b1;
-      u_char s_b2;
-      u_char s_b3;
-      u_char s_b4;
-    } S_un_b;
-    struct {
-      u_short s_w1;
-      u_short s_w2;
-    } S_un_w;
-    u_long S_addr;
-  } S_un;
-};
-
-struct sockaddr_in {
-        short   sin_family;
-        u_short sin_port;
-        struct  in_addr sin_addr;
-        char    sin_zero[8];
-};
-
-struct sockaddr_in server;
-server.sin_family = AF_INET;           # 0x0002
-server.sin_addr.s_addr = INADDR_ANY;   # 0x00000000
-server.sin_port = htons(4444);         # 0x5c11
-```
-
-What we need to do is to have a pointer to the following values and pass it as the second argument:
+These values will look like the following:
 ```text
 5c110002
 00000000
 ```
 
-Notice that there are null bytes in the value for AF_INET. This can be solved by storing 0x5c110102 in EAX and doing `dec ah`, which will only decrement the ah section of EAX by one. 
+The third argument is the size of the second argument, which will be 16 bytes (0x10 in hex).
+
+Notice that there are null bytes in the value for AF_INET (0x0002). This can be solved by storing 0x5c110102 in EAX and doing `dec ah`, which will only decrement the AH section of EAX by one. 
 
 Explanation:
 + eax = 0x5c110102  
@@ -262,6 +231,37 @@ The stack looks like this right before calling bind():
 -> 00000004    5c110002                                 |
 |  00000005    00000000 (INADDR_ANY)                    | 
 --------------------------------------------------------
+```
+
+To make the *addr argument more clear, here is what it would look like in C:
+```c
+struct in_addr {
+  union {
+    struct {
+      u_char s_b1;
+      u_char s_b2;
+      u_char s_b3;
+      u_char s_b4;
+    } S_un_b;
+    struct {
+      u_short s_w1;
+      u_short s_w2;
+    } S_un_w;
+    u_long S_addr;
+  } S_un;
+};
+
+struct sockaddr_in {
+        short   sin_family;
+        u_short sin_port;
+        struct  in_addr sin_addr;
+        char    sin_zero[8];
+};
+
+struct sockaddr_in server;
+server.sin_family = AF_INET;           # 0x0002
+server.sin_addr.s_addr = INADDR_ANY;   # 0x00000000
+server.sin_port = htons(4444);         # 0x5c11
 ```
 
 ## System call: listen
