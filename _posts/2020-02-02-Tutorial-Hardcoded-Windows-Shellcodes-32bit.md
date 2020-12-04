@@ -392,7 +392,7 @@ ESP -> 0022FE24    5C110002
 ESP/EAX -> 0022FE20    00646D63   "cmd\0"
            0022FE24    5C110002
            0022FE28    00000000
-```text
+```
 
 `push eax` pushes the address of the "cmd\0" string on the stack and overwrites the previous trash there.
 ```perl
