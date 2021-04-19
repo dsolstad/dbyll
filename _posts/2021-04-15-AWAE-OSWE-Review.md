@@ -10,12 +10,12 @@ fullview: false
 
 I started the AWAE course before the <a href="https://www.offensive-security.com/offsec/awae-2020-update/">2020 update</a> and bought the upgrade after my first exam attempt, which really improved the course, in regards to more modules, techniques and the introduction to a lab. Thus, I will focus this review on the post-update course.
   
-I want to start this by saying that the course was extremely good and I learned a ton, and I would recommend it to every pentester and bug bounty hunter out there, and even developers. The course takes you through real world zero day exploits in open source software, where they show how to chain small security issues into a full unauthenticated RCE exploit to get a shell. However, the most fun part of the course is the lab with three computers for you to have a go at by yourself, like in the PWK labs.  
+I want to start this by saying that the course was extremely good and I learned a ton, and I would recommend it to every pentester and bug bounty hunter out there, and even developers. The course takes you through real world zero day exploits in open source software, where they show how to chain small security issues into full unauthenticated RCE exploits to get a shell. However, the most fun part of the course is the lab with three computers for you to have a go at by yourself, like in the PWK labs.  
 
 ## Complaints
 The biggest complaint I have heard for this course is that the main focus is whitebox testing, even after the upgrade where they added one blackbox module. This is true, but I personally don't find the whitebox focus to be a bad thing. The course will teach you what is going on at the backend and what mistakes there might be, which will give you ammunition when performing a blackbox assessment. Also, I think more pentesters should start asking for the source code when performing real world security assessments, to make the assessment more efficient and thorough.
 
-The second complaint I have heard is that you will need to read a lot of source code and that the course doesn't really go deep into teaching you how to efficiently look for vulnerabilities. I also had this impression after my first exam attempt, which I will talk about next, but overall I think the course teach you enough to pass the exam, albeit that you had the prerequired skillset.  
+The second complaint I have heard is that you will need to read a lot of source code and that the course doesn't really go deep into teaching you how to efficiently look for vulnerabilities. I also had this impression after my first exam attempt, which I will talk about next, but overall I think the course teach you enough to pass the exam, but of course it will also depend on your prior skillset.  
   
 My only wish is that the course would cover even more advanced techniques, and especially client-side attacks.
   
