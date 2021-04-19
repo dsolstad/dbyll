@@ -1,6 +1,6 @@
 ---
 layout: post
-published: false
+published: true
 title: Offensive Security AWAE/OSWE Review
 categories: [certifications]
 tags: [offsec, awae, web-300, oswe, review]
@@ -22,11 +22,11 @@ My only wish is that the course would cover even more advanced techniques, and e
 ## Exam
 There is no secret that the exam exist of two machines, where you will need to find a way to bypass authentication and then find a way to execute code to get a shell. On my first exam attempt I took down one of the machines after a couple of hours, and then used the remaining time on the other machine without getting any results. After this, I was irritated and felt that the machine was unfairly difficult. When I looked back at the course PDF, I saw that it would have helped me if I did _all_ the extra mile assessments, because I only did the ones I thought were relevant and fun.  
   
-On my next exam, I got different machines and I finished both of them within the first day. I really enjoyed the exam and felt that they were on the perfect level of difficulty. They were indeed hard, but still doable, and also a lot of fun and realistic. Only the first couple of hours were stressful, because you no clue what to do, but after a while you start to understand and it gets enjoyable. The next day I spent many hours on writing a huge professional report, which was probably overkill, but I'm one of those weird persons that enjoy writing nice reports.
+On my next exam, I got different machines and I got enough points to pass within the first day, and finished the last objective the morning after. I really enjoyed the exam and felt that they were on the perfect level of difficulty. They were indeed hard, but still doable, and also a lot of fun and realistic. Only the first couple of hours were stressful, because you have no clue what to do, but after a while you start to understand and it gets enjoyable. The next day I spent many hours on writing a huge professional report, which was probably overkill, but I'm one of those weird persons that enjoy writing nice reports.
 
 ## Tips
 - The exam requires you to write the whole attack chain for each machine in one script that automates the whole process, so make sure you are very comfortable in at least one language.
 - Do all the extra mile assessments in the course.
 - Try to find all the ways to exploit the machines in the course lab and write a full PoC script for them.
-- Try to enjoy the course and the journey.
 - If you fail your first exam attempt, don't give up. Have another go.
+- Try to enjoy the course and the journey.
